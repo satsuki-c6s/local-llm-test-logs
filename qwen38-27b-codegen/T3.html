@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>地球・太陽・月の軌道シミュレーター</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0e1a;
+    color: #e0e6f0;
+    font-family: "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+  h1 {
+    font-size: 20px;
+    margin: 16px 0 8px;
+    font-weight: 600;
+    letter-spacing: 2px;
+  }
+  #canvas {
+    background: radial-gradient(ellipse at center, #101830 0%, #060912 100%);
+    border: 1px solid #2a3550;
+    border-radius: 8px;
+    display: block;
+  }
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin: 14px 0 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  button {
+    background: #1c2740;
+    color: #e0e6f0;
+    border: 1px solid #3a4a70;
+    border-radius: 6px;
+    padding: 8px 18px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  button:hover { background: #2a3a5e; }
+  button.active {
+    background: #3a5aa0;
+    border-color: #5a7ad0;
+  }
+  .speed-group {
+    display: flex;
+    border: 1px solid #3a4a70;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .speed-group button {
+    border: none;
+    border-radius: 0;
+    border-right: 1px solid #3a4a70;
+  }
+  .speed-group button:last-child { border-right: none; }
+  .info {
+    font-size: 12px;
+    color: #7a88a8;
+    margin-bottom: 16px;
+  }
+</style>
+</head>
+<body>
+
+<h1>地球・太陽・月の軌道シミュレーター</h1>
+<canvas id="canvas" width="800" height="600"></canvas>
+
+<div class="controls">
+  <button id="toggleBtn">⏸ 一時停止</button>
+  <div class="speed-group">
+    <button id="slowBtn">遅い</button>
+    <button id="normalBtn" class="active">普通</button>
+    <button id="fastBtn">速い</button>
+  </div>
+</div>
+
+<div class="info">周期比: 地球公転 1 周 : 月公転 12 周</div>
+
+<script>
+(function () {
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width;
+  const H = canvas.height;
+  const cx = W / 2;
+  const cy = H / 2;
+
+  // 見やすい配置(実際の縮尺ではない)
+  const SUN_RADIUS = 26;
+  const EARTH_ORBIT_R = 180;   // 地球の公転半径
+  const EARTH_RADIUS = 12;
+  const MOON_ORBIT_R = 34;     // 月の公転半径(地球中心から)
+  const MOON_RADIUS = 5;
+
+  // 角速度: 地球 1 周 = 2π / T
+  // 月は地球の 12 倍の速さ
+  const BASE_OMEGA = 0.004;          // 地球の角速度(1フレームあたり、普通速度)
+  const EARTH_OMEGA = BASE_OMEGA;
+  const MOON_OMEGA = BASE_OMEGA * 12;
+
+  let earthAngle = 0;
+  let moonAngle = 0;
+  let running = true;
+  let speedFactor = 1;
+
+  // 速度設定
+  const speedBtns = {
+    slow:   document.getElementById('slowBtn'),
+    normal: document.getElementById('normalBtn'),
+    fast:   document.getElementById('fastBtn')
+  };
+  const speedValues = { slow: 0.3, normal: 1, fast: 3 };
+
+  function setSpeed(key) {
+    speedFactor = speedValues[key];
+    Object.keys(speedBtns).forEach(k => speedBtns[k].classList.toggle('active', k === key));
+  }
+  speedBtns.slow.addEventListener('click', () => setSpeed('slow'));
+  speedBtns.normal.addEventListener('click', () => setSpeed('normal'));
+  speedBtns.fast.addEventListener('click', () => setSpeed('fast'));
+
+  // 一時停止 / 再開
+  const toggleBtn = document.getElementById('toggleBtn');
+  toggleBtn.addEventListener('click', () => {
+    running = !running;
+    toggleBtn.textContent = running ? '⏸ 一時停止' : '▶ 再開';
+  });
+
+  // 背景の星(固定)
+  const stars = [];
+  for (let i = 0; i < 120; i++) {
+    stars.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.2 + 0.3,
+      a: Math.random() * 0.6 + 0.2
+    });
+  }
+
+  function drawStars() {
+    for (const s of stars) {
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255,255,255,' + s.a + ')';
+      ctx.fill();
+    }
+  }
+
+  function drawOrbit(centerX, centerY, radius) {
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(120, 150, 220, 0.45)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  function drawLabel(text, x, y, color) {
+    ctx.font = '13px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = color;
+    ctx.fillText(text, x, y);
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    drawStars();
+
+    // 地球の位置
+    const ex = cx + Math.cos(earthAngle) * EARTH_ORBIT_R;
+    const ey = cy + Math.sin(earthAngle) * EARTH_ORBIT_R;
+
+    // 月の位置
+    const mx = ex + Math.cos(moonAngle) * MOON_ORBIT_R;
+    const my = ey + Math.sin(moonAngle) * MOON_ORBIT_R;
+
+    // 軌道線
+    drawOrbit(cx, cy, EARTH_ORBIT_R);   // 地球の公転軌道
+    drawOrbit(ex, ey, MOON_ORBIT_R);    // 月の公転軌道(地球中心)
+
+    // 太陽
+    const sunGrad = ctx.createRadialGradient(cx, cy, 2, cx, cy, SUN_RADIUS * 2.2);
+    sunGrad.addColorStop(0, '#fff7c0');
+    sunGrad.addColorStop(0.35, '#ffd54a');
+    sunGrad.addColorStop(0.7, 'rgba(255,160,40,0.35)');
+    sunGrad.addColorStop(1, 'rgba(255,160,40,0)');
+    ctx.beginPath();
+    ctx.arc(cx, cy, SUN_RADIUS * 2.2, 0, Math.PI * 2);
+    ctx.fillStyle = sunGrad;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, SUN_RADIUS, 0, Math.PI * 2);
+    const sunBody = ctx.createRadialGradient(cx - 8, cy - 8, 3, cx, cy, SUN_RADIUS);
+    sunBody.addColorStop(0, '#fffbe0');
+    sunBody.addColorStop(1, '#ff9d2e');
+    ctx.fillStyle = sunBody;
+    ctx.fill();
+
+    // 地球
+    ctx.beginPath();
+    ctx.arc(ex, ey, EARTH_RADIUS, 0, Math.PI * 2);
+    const earthGrad = ctx.createRadialGradient(ex - 4, ey - 4, 2, ex, ey, EARTH_RADIUS);
+    earthGrad.addColorStop(0, '#9fd4ff');
+    earthGrad.addColorStop(1, '#1e5fd0');
+    ctx.fillStyle = earthGrad;
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(180,220,255,0.6)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // 月
+    ctx.beginPath();
+    ctx.arc(mx, my, MOON_RADIUS, 0, Math.PI * 2);
+    const moonGrad = ctx.createRadialGradient(mx - 2, my - 2, 1, mx, my, MOON_RADIUS);
+    moonGrad.addColorStop(0, '#f5f5f0');
+    moonGrad.addColorStop(1, '#9a9a92');
+    ctx.fillStyle = moonGrad;
+    ctx.fill();
+
+    // ラベル
+    drawLabel('太陽', cx, cy + SUN_RADIUS + 8, '#ffd54a');
+    drawLabel('地球', ex, ey - EARTH_RADIUS - 22, '#9fd4ff');
+    drawLabel('月', mx, my + MOON_RADIUS + 5, '#d8d8d0');
+  }
+
+  function update() {
+    if (running) {
+      earthAngle += EARTH_OMEGA * speedFactor;
+      moonAngle += MOON_OMEGA * speedFactor;
+      if (earthAngle >= Math.PI * 2) earthAngle -= Math.PI * 2;
+      if (moonAngle >= Math.PI * 2) moonAngle -= Math.PI * 2;
+    }
+  }
+
+  function loop() {
+    update();
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+{
+  "model": "nemotron-3.5-lightning:30b",
+  "digest": "e7a64ff15fb1",
+  "ranAt": "2026-08-12T02:00:05.918Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "140.7",
+      "chars": 2327
+    },
+    {
+      "id": "A2",
+      "tokS": "140.7",
+      "chars": 129
+    },
+    {
+      "id": "B1",
+      "tokS": "121.5",
+      "chars": 706
+    },
+    {
+      "id": "B2",
+      "tokS": "125.7",
+      "chars": 506
+    },
+    {
+      "id": "C1",
+      "tokS": "136.0",
+      "chars": 2752
+    },
+    {
+      "id": "C2",
+      "tokS": "107.3",
+      "chars": 53
+    }
+  ]
+}

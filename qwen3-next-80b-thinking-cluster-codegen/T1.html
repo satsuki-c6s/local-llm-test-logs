@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>To-Do App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    input[type="text"] {
+      padding: 8px;
+      width: 70%;
+    }
+    button {
+      padding: 8px 16px;
+      margin-left: 5px;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+    li input[type="checkbox"] {
+      margin-right: 10px;
+    }
+    li span {
+      flex: 1;
+    }
+    li button {
+      margin-left: 10px;
+    }
+    .filter-buttons {
+      margin: 10px 0;
+    }
+    .count {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>To-Do List</h1>
+  <input type="text" id="taskInput" placeholder="Add a new task...">
+  <button id="addButton">Add</button>
+  
+  <div class="filter-buttons">
+    <button id="filterAll">All</button>
+    <button id="filterIncomplete">Incomplete</button>
+    <button id="filterComplete">Complete</button>
+  </div>
+  
+  <p class="count">Incomplete tasks: <span id="count">0</span></p>
+  
+  <ul id="taskList"></ul>
+
+  <script>
+    let tasks = [];
+    let currentFilter = 'all';
+
+    function loadTasks() {
+      const savedTasks = localStorage.getItem('tasks');
+      if (savedTasks) {
+        tasks = JSON.parse(savedTasks);
+      }
+      renderTasks();
+      updateCount();
+    }
+
+    function saveTasks() {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function renderTasks() {
+      const taskList = document.getElementById('taskList');
+      taskList.innerHTML = '';
+
+      const filteredTasks = tasks.filter(task => {
+        if (currentFilter === 'all') return true;
+        if (currentFilter === 'incomplete') return !task.completed;
+        if (currentFilter === 'complete') return task.completed;
+        return true;
+      });
+
+      filteredTasks.forEach(task => {
+        const li = document.createElement('li');
+        li.dataset.id = task.id;
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = task.completed;
+        checkbox.addEventListener('change', () => toggleTask(task.id));
+
+        const span = document.createElement('span');
+        span.textContent = task.text;
+        span.addEventListener('dblclick', () => editTask(task.id));
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.addEventListener('click', () => deleteTask(task.id));
+
+        li.appendChild(checkbox);
+        li.appendChild(span);
+        li.appendChild(deleteButton);
+        taskList.appendChild(li);
+      });
+    }
+
+    function addTask() {
+      const input = document.getElementById('taskInput');
+      const text = input.value.trim();
+      if (text === '') return;
+
+      const newTask = {
+        id: Date.now(),
+        text: text,
+        completed: false
+      };
+
+      tasks.push(newTask);
+      saveTasks();
+      input.value = '';
+      renderTasks();
+      updateCount();
+    }
+
+    function toggleTask(id) {
+      const task = tasks.find(t => t.id === id);
+      if (task) {
+        task.completed = !task.completed;
+        saveTasks();
+        renderTasks();
+        updateCount();
+      }
+    }
+
+    function deleteTask(id) {
+      tasks = tasks.filter(t => t.id !== id);
+      saveTasks();
+      renderTasks();
+      updateCount();
+    }
+
+    function editTask(id) {
+      const li = document.querySelector(`li[data-id="${id}"]`);
+      const span = li.querySelector('span');
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = span.textContent;
+      input.addEventListener('blur', () => saveEditedTask(id, input.value));
+      input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          saveEditedTask(id, input.value);
+        }
+      });
+      span.replaceWith(input);
+      input.focus();
+    }
+
+    function saveEditedTask(id, newText) {
+      const task = tasks.find(t => t.id === id);
+      if (task) {
+        task.text = newText.trim();
+        saveTasks();
+        renderTasks();
+      }
+    }
+
+    function updateCount() {
+      const count = tasks.filter(task => !task.completed).length;
+      document.getElementById('count').textContent = count;
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      renderTasks();
+    }
+
+    document.getElementById('addButton').addEventListener('click', addTask);
+    document.getElementById('filterAll').addEventListener('click', () => setFilter('all'));
+    document.getElementById('filterIncomplete').addEventListener('click', () => setFilter('incomplete'));
+    document.getElementById('filterComplete').addEventListener('click', () => setFilter('complete'));
+
+    window.addEventListener('DOMContentLoaded', loadTasks);
+  </script>
+</body>
+</html>

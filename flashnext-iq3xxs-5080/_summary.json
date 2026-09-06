@@ -1,0 +1,51 @@
+{
+  "model": "flashnext-iq3xxs-5080-cpumoe",
+  "runtime": "llama.cpp (<models>/Qwen3.8-Flash-Next-UD-IQ3_XXS-00001-of-00003.gguf)",
+  "ftype": "IQ3_XXS - 3.0625 bpw",
+  "baseUrl": "(公開用に伏せています)",
+  "ranAt": "2026-09-02T10:04:51.419Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "24.0",
+      "chars": 2069,
+      "reasoningChars": 0,
+      "finishReason": "stop"
+    },
+    {
+      "id": "A2",
+      "tokS": "13.2",
+      "chars": 164,
+      "reasoningChars": 0,
+      "finishReason": "stop"
+    },
+    {
+      "id": "B1",
+      "tokS": "23.8",
+      "chars": 920,
+      "reasoningChars": 0,
+      "finishReason": "stop"
+    },
+    {
+      "id": "B2",
+      "tokS": "23.6",
+      "chars": 375,
+      "reasoningChars": 0,
+      "finishReason": "stop"
+    },
+    {
+      "id": "C1",
+      "tokS": "25.6",
+      "chars": 2481,
+      "reasoningChars": 0,
+      "finishReason": "stop"
+    },
+    {
+      "id": "C2",
+      "tokS": "14.3",
+      "chars": 47,
+      "reasoningChars": 0,
+      "finishReason": "stop"
+    }
+  ]
+}

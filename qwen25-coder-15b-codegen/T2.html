@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Block Breaker</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            background-color: #f0f0f0;
+        }
+        .score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div class="score">Score: 0</div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // ゲーム状態
+        let paddleX = canvas.width / 2;
+        let paddleY = canvas.height - 30;
+        let paddleWidth = 100;
+        let paddleHeight = 15;
+
+        let ballX = canvas.width / 2;
+        let ballY = canvas.height / 2;
+        let ballSpeedX = 4;
+        let ballSpeedY = 4;
+
+        let blockWidth = 75;
+        let blockHeight = 30;
+        let blocks = [];
+        const numBlocksRows = 5;
+        const numBlocksCols = Math.floor(canvas.width / blockWidth);
+
+        for (let i = 0; i < numBlocksRows; i++) {
+            for (let j = 0; j < numBlocksCols; j++) {
+                blocks.push({
+                    x: j * blockWidth,
+                    y: i * blockHeight + 50,
+                    width: blockWidth,
+                    height: blockHeight
+                });
+            }
+        }
+
+        let score = 0;
+
+        // パドルの移動
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && paddleX > 0) {
+                paddleX -= 10;
+            } else if (e.key === 'ArrowRight' && paddleX < canvas.width - paddleWidth) {
+                paddleX += 10;
+            }
+        });
+
+        // ボールの移動
+        function moveBall() {
+            ballX += ballSpeedX;
+            ballY += ballSpeedY;
+
+            // 壁と天井との衝突判定
+            if (ballX < 0 || ballX > canvas.width - blockWidth) {
+                ballSpeedX = -ballSpeedX;
+            }
+            if (ballY < 0) {
+                ballSpeedY = -ballSpeedY;
+            }
+
+            // パドルとの衝突判定
+            if (ballY + ballHeight >= paddleY && ballX >= paddleX && ballX <= paddleX + paddleWidth) {
+                ballSpeedY = -ballSpeedY;
+            }
+
+            // 場面との衝突判定
+            for (let block of blocks) {
+                if (ballX > block.x && ballX < block.x + block.width && ballY > block.y && ballY < block.y + block.height) {
+                    ballSpeedY = -ballSpeedY;
+                    score++;
+                    break;
+                }
+            }
+
+            // ボールが下に落ちたらゲームオーバー
+            if (ballY > canvas.height) {
+                alert('Game Over!');
+                location.reload();
+            }
+
+            // ブロックを消去
+            blocks = blocks.filter(block => ballX + ballSpeedX < block.x || ballX + ballSpeedX > block.x + block.width || ballY + ballSpeedY < block.y || ballY + ballSpeedY > block.y + block.height);
+
+            // ゲームクリア
+            if (blocks.length === 0) {
+                alert('Clear!');
+                location.reload();
+            }
+        }
+
+        // ブロックの描画
+        function drawBlocks() {
+            for (let block of blocks) {
+                ctx.fillStyle = 'blue';
+                ctx.fillRect(block.x, block.y, block.width, block.height);
+            }
+        }
+
+        // スコア表示
+        function drawScore() {
+            ctx.font = '20px Arial';
+            ctx.fillStyle = '#333';
+            ctx.fillText('Score: ' + score, 10, 20);
+        }
+
+        // メインループ
+        function gameLoop() {
+            moveBall();
+            drawBlocks();
+            drawScore();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // ゲーム開始
+        gameLoop();
+    </script>
+</body>
+</html>

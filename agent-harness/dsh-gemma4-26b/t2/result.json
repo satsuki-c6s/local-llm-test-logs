@@ -1,0 +1,55 @@
+{
+ "series": "agent-harness",
+ "slug": "dsh-gemma4-26b",
+ "model": "gemma4-26b-ctx64k",
+ "task": "t2",
+ "harness": "DeepSeek Harness (deepseek-harness-sdk 0.1.2rc1・sdk-minimal・repo d347e70)",
+ "route": "deepseek-official → http://127.0.0.1:11434/v1",
+ "timeoutSec": 900,
+ "sessionId": "dsh-gemma4-26b-t2-2026-09-05T23-09-58-887Z",
+ "startedAt": "2026-09-05T23:09:59.026Z",
+ "wallMs": 85298,
+ "exitCode": 0,
+ "timedOut": false,
+ "assistantMsgs": 16,
+ "steps": 16,
+ "toolCounts": {
+  "pwsh": 13,
+  "str_replace_editor": 2
+ },
+ "toolCallsTotal": 15,
+ "externalRemotes": [
+  "20.213.196.214:443 (pwsh)"
+ ],
+ "vramMaxMiB": 24381,
+ "workspaceDiff": [
+  "A report.json"
+ ],
+ "selfCheck": null,
+ "judge": {
+  "task": "T2",
+  "grade": "◎",
+  "reason": "8欄すべて正解",
+  "exists": true,
+  "parsed": true,
+  "wrong": [],
+  "values": {
+   "database_file": "data/kumoribi.sqlite",
+   "dependencies": [
+    "better-sqlite3",
+    "commander",
+    "yaml"
+   ],
+   "port": 47311,
+   "entrypoint": "src/server.js",
+   "project": "kumoribi-ledger",
+   "todo_count": 4,
+   "latest_release": {
+    "version": "2.7.3",
+    "date": "2026-07-19"
+   },
+   "version": "2.7.3"
+  }
+ },
+ "finalResponse": "package.json、config/settings.yaml、CHANGELOG.md、およびsrc内のソースコードを調査しました。\r\n調査結果を、指定されたスキーマに従ってproject/report.jsonに書き出しました。\r\n\r\nproject内のファイルを解析し、package.jsonからプロジェクト名や依存関係、src内のTODO数、CHANGELOGからの最新リリース情報を抽出しました。\r\n最終的に、すべての情報を集約してreport.jsonを作成しました。"
+}

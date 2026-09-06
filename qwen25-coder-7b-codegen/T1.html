@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo App</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .todo-list { list-style-type: none; padding: 0; }
+        .todo-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .todo-item input[type="checkbox"] { margin-right: 10px; }
+        .todo-item span { cursor: pointer; }
+        .todo-item input[type="text"] { width: calc(100% - 40px); padding: 5px; border: 1px solid #ccc; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>ToDo App</h1>
+    <input type="text" id="new-task" placeholder="新しいタスクを追加...">
+    <button onclick="addTask()">追加</button>
+    <div>
+        <label><input type="radio" name="filter" value="all" checked onclick="filterTasks('all')"> すべて</label>
+        <label><input type="radio" name="filter" value="active" onclick="filterTasks('active')"> 未完了</label>
+        <label><input type="radio" name="filter" value="completed" onclick="filterTasks('completed')"> 完了</label>
+    </div>
+    <ul id="todo-list"></ul>
+    <p>未完了タスク: <span id="active-count">0</span></p>
+
+    <script>
+        const todoList = document.getElementById('todo-list');
+        const newTaskInput = document.getElementById('new-task');
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+        function renderTasks() {
+            todoList.innerHTML = '';
+            tasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                li.className = 'todo-item';
+                li.dataset.index = index;
+
+                if (task.completed) {
+                    li.classList.add('completed');
+                }
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = task.completed;
+                checkbox.onchange = () => toggleTask(index);
+
+                const span = document.createElement('span');
+                span.textContent = task.text;
+                span.contentEditable = true;
+                span.ondblclick = () => editTask(index);
+                span.oninput = () => saveTasks();
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = '削除';
+                deleteButton.onclick = () => deleteTask(index);
+
+                li.appendChild(checkbox);
+                li.appendChild(span);
+                li.appendChild(deleteButton);
+                todoList.appendChild(li);
+            });
+
+            updateActiveCount();
+        }
+
+        function addTask() {
+            const text = newTaskInput.value.trim();
+            if (text) {
+                tasks.push({ text, completed: false });
+                saveTasks();
+                renderTasks();
+                newTaskInput.value = '';
+            }
+        }
+
+        function toggleTask(index) {
+            tasks[index].completed = !tasks[index].completed;
+            saveTasks();
+            renderTasks();
+        }
+
+        function editTask(index) {
+            const li = todoList.children[index];
+            const span = li.querySelector('span');
+            span.contentEditable = true;
+            span.focus();
+        }
+
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            saveTasks();
+            renderTasks();
+        }
+
+        function filterTasks(filter) {
+            const filteredTasks = tasks.filter(task => 
+                (filter === 'all') || 
+                (filter === 'active' && !task.completed) || 
+                (filter === 'completed' && task.completed)
+            );
+            renderTasks(filteredTasks);
+        }
+
+        function updateActiveCount() {
+            const activeCount = tasks.filter(task => !task.completed).length;
+            document.getElementById('active-count').textContent = activeCount;
+        }
+
+        function saveTasks() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        renderTasks();
+    </script>
+</body>
+</html>

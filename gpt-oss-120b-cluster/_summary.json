@@ -1,0 +1,42 @@
+{
+  "model": "gpt-oss-120b-UD-Q4_K_XL (mesh-llm 4台クラスタ)",
+  "runAt": "2026-08-07",
+  "results": [
+    {
+      "id": "A1",
+      "seconds": 111,
+      "finishReason": "stop",
+      "contentChars": 5137
+    },
+    {
+      "id": "A2",
+      "seconds": 10,
+      "finishReason": "stop",
+      "contentChars": 157
+    },
+    {
+      "id": "B1",
+      "seconds": 20,
+      "finishReason": "stop",
+      "contentChars": 529
+    },
+    {
+      "id": "B2",
+      "seconds": 30,
+      "finishReason": "stop",
+      "contentChars": 679
+    },
+    {
+      "id": "C1",
+      "seconds": 231,
+      "finishReason": "length",
+      "contentChars": 10465
+    },
+    {
+      "id": "C2",
+      "seconds": 231,
+      "finishReason": "length",
+      "contentChars": 0
+    }
+  ]
+}

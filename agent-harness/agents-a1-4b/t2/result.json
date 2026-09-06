@@ -1,0 +1,44 @@
+{
+ "series": "agent-harness",
+ "slug": "agents-a1-4b",
+ "model": "agents-a1-4b:Q4_K_M",
+ "task": "t2",
+ "harness": "OpenClaw 2026.7.1-2 (0790d9f)",
+ "thinking": "off",
+ "timeoutSec": 900,
+ "forcedExit": false,
+ "agentDoneAt": null,
+ "sessionId": "3ece318b-fd18-4551-b1f9-ae6c50f4e31d",
+ "startedAt": "2026-08-29T09:29:17.503Z",
+ "wallMs": 268181,
+ "exitCode": 1,
+ "timedOut": false,
+ "agentJsonPresent": false,
+ "durationMs_route1": null,
+ "stopReason_route1": null,
+ "toolSummary_route1": null,
+ "skillsInjected_route1": null,
+ "toolsSeen_route1": null,
+ "assistantMsgs_route2": 11,
+ "toolCounts_route2": {
+  "exec": 5,
+  "read": 5
+ },
+ "toolCallsTotal_route2": 10,
+ "loopSuspect": false,
+ "externalRemotes": [
+  "172.64.155.209"
+ ],
+ "vramMaxMiB": 7343,
+ "workspaceDiff": [],
+ "selfCheck": null,
+ "judge": {
+  "task": "T2",
+  "grade": "×",
+  "reason": "report.json が無い",
+  "exists": false,
+  "parsed": false,
+  "wrong": [],
+  "values": null
+ }
+}

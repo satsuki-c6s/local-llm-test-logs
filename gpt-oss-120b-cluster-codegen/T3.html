@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>太陽・地球・月 シミュレーター</title>
+<style>
+    body{
+        margin:0;
+        font-family:Arial,Helvetica,sans-serif;
+        background:#111;
+        color:#ddd;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:flex-start;
+        height:100vh;
+    }
+    #canvas{
+        background:#000;
+        border:1px solid #555;
+        margin-top:10px;
+    }
+    #controls{
+        margin-top:10px;
+    }
+    button, select{
+        font-size:1rem;
+        padding:4px 8px;
+        margin-right:8px;
+    }
+</style>
+</head>
+<body>
+    <h2>太陽・地球・月 シミュレーター</h2>
+
+    <canvas id="canvas" width="800" height="600"></canvas>
+
+    <div id="controls">
+        <button id="pauseBtn">一時停止</button>
+        <label for="speedSelect">速度：</label>
+        <select id="speedSelect">
+            <option value="0.5">遅い</option>
+            <option value="1" selected>普通</option>
+            <option value="2">速い</option>
+        </select>
+    </div>
+
+<script>
+(() => {
+    // ---------- 定数 ----------
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const SUN = { x: canvas.width/2, y: canvas.height/2, r: 30, color: '#ffcc33' };
+    const EARTH = {
+        orbitRadius: 200,   // 地球の公転半径
+        r: 15,
+        color: '#3399ff'
+    };
+    const MOON = {
+        orbitRadius: 50,    // 月の地球周回半径
+        r: 8,
+        color: '#bbbbbb'
+    };
+
+    // 地球の公転周期を 1 としたとき、月は約12回転するので
+    // 角速度は 12 倍にする
+    const EARTH_ANG_SPEED = 0.001; // 基本角速度 (rad/ms)
+    const MOON_ANG_SPEED = EARTH_ANG_SPEED * 12;
+
+    // ---------- UI ----------
+    const pauseBtn = document.getElementById('pauseBtn');
+    const speedSelect = document.getElementById('speedSelect');
+
+    let paused = false;
+    let speedFactor = 1; // 速度倍率
+
+    pauseBtn.addEventListener('click', () => {
+        paused = !paused;
+        pauseBtn.textContent = paused ? '再開' : '一時停止';
+    });
+
+    speedSelect.addEventListener('change', () => {
+        speedFactor = parseFloat(speedSelect.value);
+    });
+
+    // ---------- アニメーション ----------
+    let lastTime = performance.now();
+    let earthAngle = 0; // 地球の現在角度
+    let moonAngle = 0;  // 月の現在角度（地球中心からの相対角度）
+
+    function drawOrbit(x, y, radius, color){
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI*2);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1;
+        ctx.setLineDash([5,5]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+    }
+
+    function drawBody(x, y, r, color){
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI*2);
+        ctx.fillStyle = color;
+        ctx.fill();
+    }
+
+    function drawLabel(text, x, y){
+        ctx.font = '14px Arial';
+        ctx.fillStyle = '#fff';
+        ctx.fillText(text, x, y);
+    }
+
+    function animate(now){
+        const dt = now - lastTime;
+        lastTime = now;
+
+        if(!paused){
+            // 角度を時間に合わせて増やす
+            earthAngle += EARTH_ANG_SPEED * dt * speedFactor;
+            moonAngle  += MOON_ANG_SPEED * dt * speedFactor;
+        }
+
+        // クリア
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        // ---- 1. 太陽 ----
+        drawBody(SUN.x, SUN.y, SUN.r, SUN.color);
+        drawLabel('太陽', SUN.x - 20, SUN.y - SUN.r - 5);
+
+        // ---- 2. 地球の軌道 ----
+        drawOrbit(SUN.x, SUN.y, EARTH.orbitRadius, '#555');
+
+        // 2-1. 地球位置計算
+        const earthX = SUN.x + EARTH.orbitRadius * Math.cos(earthAngle);
+        const earthY = SUN.y + EARTH.orbitRadius * Math.sin(earthAngle);
+
+        // ---- 3. 月の軌道（地球中心） ----
+        drawOrbit(earthX, earthY, MOON.orbitRadius, '#777');
+
+        // ---- 4. 月の位置 ----
+        const moonX = earthX + MOON.orbitRadius * Math.cos(moonAngle);
+        const moonY = earthY + MOON.orbitRadius * Math.sin(moonAngle);
+
+        // ---- 3. 月 ----
+        drawBody(moonX, moonY, MOON.r, MOON.color);
+        drawLabel('月', moonX - 10, moonY - MOON.r - 5);
+
+        // ---- 2. 地球 ----
+        drawBody(earthX, earthY, EARTH.r, EARTH.color);
+        drawLabel('地球', earthX - 20, earthY - EARTH.r - 5);
+
+        // 次フレームへ
+        requestAnimationFrame(animate);
+    }
+
+    // アニメーション開始
+    requestAnimationFrame(animate);
+})();
+</script>
+</body>
+</html>

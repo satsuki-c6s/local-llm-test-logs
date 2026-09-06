@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ToDoアプリ</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 { text-align: center; }
+    #input-area {
+      display: flex;
+      margin-bottom: 10px;
+    }
+    #task-input {
+      flex: 1;
+      padding: 8px;
+    }
+    #add-button {
+      padding: 8px 12px;
+      margin-left: 5px;
+    }
+    #filters {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 10px;
+    }
+    #task-list {
+      list-style-type: none;
+      padding: 0;
+    }
+    .task-item {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+    }
+    .task-item.completed span {
+      text-decoration: line-through;
+      color: #999;
+    }
+    .task-checkbox {
+      margin-right: 10px;
+    }
+    .task-text {
+      flex: 1;
+      cursor: pointer;
+    }
+    .delete-button {
+      margin-left: 10px;
+      background: none;
+      border: none;
+      color: #f00;
+      cursor: pointer;
+    }
+    #count {
+      text-align: center;
+      margin-top: 10px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>ToDoアプリ</h1>
+  <div id="input-area">
+    <input type="text" id="task-input" placeholder="タスクを入力">
+    <button id="add-button">追加</button>
+  </div>
+  <div id="filters">
+    <button id="all-filter">すべて</button>
+    <button id="active-filter">未完了</button>
+    <button id="completed-filter">完了</button>
+  </div>
+  <ul id="task-list"></ul>
+  <div id="count">未完了タスク: <span id="count-number">0</span></div>
+
+  <script>
+    // タスクデータ
+    let tasks = [];
+    let currentFilter = 'all';
+
+    // DOM要素の取得
+    const taskInput = document.getElementById('task-input');
+    const addButton = document.getElementById('add-button');
+    const taskList = document.getElementById('task-list');
+    const allFilter = document.getElementById('all-filter');
+    const activeFilter = document.getElementById('active-filter');
+    const completedFilter = document.getElementById('completed-filter');
+    const countNumber = document.getElementById('count-number');
+
+    // localStorageからタスクを読み込み
+    function loadTasks() {
+      const savedTasks = localStorage.getItem('tasks');
+      if (savedTasks) {
+        tasks = JSON.parse(savedTasks);
+        renderTasks();
+      }
+    }
+
+    // タスクをlocalStorageに保存
+    function saveTasks() {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      updateCount();
+    }
+
+    // タスクを追加
+    function addTask(text) {
+      if (text.trim() === '') return;
+      tasks.push({
+        id: Date.now(),
+        text: text,
+        completed: false
+      });
+      saveTasks();
+      renderTasks();
+    }
+
+    // タスクを削除
+    function deleteTask(id) {
+      tasks = tasks.filter(task => task.id !== id);
+      saveTasks();
+      renderTasks();
+    }
+
+    // タスクの完了状態を切り替え
+    function toggleTask(id) {
+      tasks = tasks.map(task => {
+        if (task.id === id) {
+          return { ...task, completed: !task.completed };
+        }
+        return task;
+      });
+      saveTasks();
+      renderTasks();
+    }
+
+    // タスクを編集
+    function editTask(id, newText) {
+      if (newText.trim() === '') return;
+      tasks = tasks.map(task => {
+        if (task.id === id) {
+          return { ...task, text: newText };
+        }
+        return task;
+      });
+      saveTasks();
+      renderTasks();
+    }
+
+    // フィルターを変更
+    function setFilter(filter) {
+      currentFilter = filter;
+      renderTasks();
+    }
+
+    // 未完了タスク数を更新
+    function updateCount() {
+      const count = tasks.filter(task => !task.completed).length;
+      countNumber.textContent = count;
+    }
+
+    // タスクを描画
+    function renderTasks() {
+      taskList.innerHTML = '';
+      let filteredTasks = [];
+
+      if (currentFilter === 'active') {
+        filteredTasks = tasks.filter(task => !task.completed);
+      } else if (currentFilter === 'completed') {
+        filteredTasks = tasks.filter(task => task.completed);
+      } else {
+        filteredTasks = [...tasks];
+      }
+
+      filteredTasks.forEach(task => {
+        const li = document.createElement('li');
+        li.className = `task-item ${task.completed ? 'completed' : ''}`;
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'task-checkbox';
+        checkbox.checked = task.completed;
+        checkbox.addEventListener('change', () => toggleTask(task.id));
+
+        const span = document.createElement('span');
+        span.className = 'task-text';
+        span.textContent = task.text;
+
+        // ダブルクリックで編集
+        span.addEventListener('dblclick', () => {
+          const newText = prompt('タスクを編集:', task.text);
+          if (newText !== null) {
+            editTask(task.id, newText);
+          }
+        });
+
+        const deleteButton = document.createElement('button');
+        deleteButton.className = 'delete-button';
+        deleteButton.textContent = '削除';
+        deleteButton.addEventListener('click', () => deleteTask(task.id));
+
+        li.appendChild(checkbox);
+        li.appendChild(span);
+        li.appendChild(deleteButton);
+
+        taskList.appendChild(li);
+      });
+    }
+
+    // イベントリスナー
+    addButton.addEventListener('click', () => {
+      addTask(taskInput.value);
+      taskInput.value = '';
+    });
+
+    taskInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        addTask(taskInput.value);
+        taskInput.value = '';
+      }
+    });
+
+    allFilter.addEventListener('click', () => setFilter('all'));
+    activeFilter.addEventListener('click', () => setFilter('active'));
+    completedFilter.addEventListener('click', () => setFilter('completed'));
+
+    // 初期化
+    loadTasks();
+  </script>
+</body>
+</html>

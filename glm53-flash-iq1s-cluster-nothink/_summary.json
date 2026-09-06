@@ -1,0 +1,40 @@
+{
+  "model": "glm-5.3-flash-ud-iq1s",
+  "runtime": "llama.cpp-rpc",
+  "baseUrl": "(公開用に伏せています)",
+  "ranAt": "2026-08-28T04:33:00.035Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "3.8",
+      "chars": 3068,
+      "carriedOver": true
+    },
+    {
+      "id": "A2",
+      "tokS": "3.7",
+      "chars": 464,
+      "carriedOver": true
+    },
+    {
+      "id": "B1",
+      "tokS": "3.8",
+      "chars": 637
+    },
+    {
+      "id": "B2",
+      "tokS": "4.0",
+      "chars": 565
+    },
+    {
+      "id": "C1",
+      "tokS": "3.8",
+      "chars": 1583
+    },
+    {
+      "id": "C2",
+      "tokS": "3.1",
+      "chars": 2068
+    }
+  ]
+}

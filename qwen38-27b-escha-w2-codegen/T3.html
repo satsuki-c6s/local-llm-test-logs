@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>地球・太陽・月の軌道シミュレーター</title>
+<style>
+  body {
+    margin: 0;
+    background: #0a0a1a;
+    color: #eee;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  h1 {
+    font-size: 18px;
+    margin: 10px 0;
+  }
+  #canvas {
+    background: #050510;
+    border: 1px solid #333;
+    border-radius: 8px;
+  }
+  .controls {
+    margin: 10px;
+    display: flex;
+    gap: 10px;
+  }
+  button {
+    background: #222;
+    color: #eee;
+    border: 1px solid #555;
+    border-radius: 6px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  button:hover { background: #333; }
+  button.active { background: #446; border-color: #88a; }
+</style>
+</head>
+<body>
+<h1>地球・太陽・月の軌道シミュレーター</h1>
+<canvas id="canvas" width="800" height="600"></canvas>
+<div class="controls">
+  <button id="toggleBtn">一時停止</button>
+  <button id="slowBtn">遅い</button>
+  <button id="normalBtn" class="active">普通</button>
+  <button id="fastBtn">速い</button>
+</div>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+const cx = canvas.width / 2;
+const cy = canvas.height / 2;
+
+// 軌道半径（見やすい配置）
+const earthOrbitRadius = 180;
+const moonOrbitRadius = 45;
+
+// 天体半径
+const sunRadius = 30;
+const earthRadius = 14;
+const moonRadius = 6;
+
+// 周期比: 地球1周 = 月12周
+const earthSpeed = 0.005;   // rad/frame
+const moonSpeed = earthSpeed * 12;
+
+let earthAngle = 0;
+let moonAngle = 0;
+let running = true;
+let speedFactor = 1;
+
+// 速度設定
+document.getElementById('slowBtn').onclick = function() {
+  speedFactor = 0.4;
+  setActive(this);
+};
+document.getElementById('normalBtn').onclick = function() {
+  speedFactor = 1;
+  setActive(this);
+};
+document.getElementById('fastBtn').onclick = function() {
+  speedFactor = 2.5;
+  setActive(this);
+};
+
+function setActive(btn) {
+  document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+document.getElementById('toggleBtn').onclick = function() {
+  running = !running;
+  this.textContent = running ? '一時停止' : '再開';
+};
+
+function drawOrbitCircle(radius) {
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+}
+
+function drawLabel(text, x, y) {
+  ctx.font = '14px sans-serif';
+  ctx.fillStyle = '#fff';
+  ctx.textAlign = 'center';
+  ctx.fillText(text, x, y);
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // 地球の軌道線（太陽中心）
+  drawOrbitCircle(earthOrbitRadius);
+
+  // 地球の位置
+  const ex = cx + earthOrbitRadius * Math.cos(earthAngle);
+  const ey = cy + earthOrbitRadius * Math.sin(earthAngle);
+
+  // 月の軌道線（地球中心）
+  ctx.beginPath();
+  ctx.arc(ex, ey, moonOrbitRadius, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // 月の位置
+  const mx = ex + moonOrbitRadius * Math.cos(moonAngle);
+  const my = ey + moonOrbitRadius * Math.sin(moonAngle);
+
+  // 太陽
+  ctx.beginPath();
+  ctx.arc(cx, cy, sunRadius, 0, Math.PI * 2);
+  ctx.fillStyle = '#ffd700';
+  ctx.fill();
+  drawLabel('太陽', cx, cy - sunRadius - 8);
+
+  // 地球
+  ctx.beginPath();
+  ctx.arc(ex, ey, earthRadius, 0, Math.PI * 2);
+  ctx.fillStyle = '#4a90d9';
+  ctx.fill();
+  drawLabel('地球', ex, ey - earthRadius - 8);
+
+  // 月
+  ctx.beginPath();
+  ctx.arc(mx, my, moonRadius, 0, Math.PI * 2);
+  ctx.fillStyle = '#cccccc';
+  ctx.fill();
+  drawLabel('月', mx, my - moonRadius - 8);
+
+  if (running) {
+    earthAngle += earthSpeed * speedFactor;
+    moonAngle += moonSpeed * speedFactor;
+  }
+
+  requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+</body>
+</html>

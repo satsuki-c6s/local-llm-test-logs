@@ -1,0 +1,49 @@
+{
+ "series": "agent-harness",
+ "slug": "gpt-oss-20b",
+ "model": "gpt-oss:20b",
+ "task": "t1",
+ "harness": "OpenClaw 2026.7.1-2 (0790d9f)",
+ "thinking": "off",
+ "timeoutSec": 900,
+ "forcedExit": false,
+ "agentDoneAt": null,
+ "sessionId": "9ca1e551-e942-4740-b8f3-1f12ea34329c",
+ "startedAt": "2026-08-30T05:36:22.572Z",
+ "wallMs": 40408,
+ "exitCode": 1,
+ "timedOut": false,
+ "agentJsonPresent": false,
+ "durationMs_route1": null,
+ "stopReason_route1": null,
+ "toolSummary_route1": null,
+ "skillsInjected_route1": null,
+ "toolsSeen_route1": null,
+ "assistantMsgs_route2": 5,
+ "toolCounts_route2": {
+  "read": 1,
+  "exec": 3
+ },
+ "toolCallsTotal_route2": 4,
+ "loopSuspect": false,
+ "externalRemotes": [],
+ "vramMaxMiB": 20708,
+ "workspaceDiff": [],
+ "selfCheck": null,
+ "judge": {
+  "task": "T1",
+  "grade": "×",
+  "reason": "テスト未通過・原因特定の証拠なし",
+  "passed": 6,
+  "failed": 1,
+  "total": 7,
+  "exitCode": 1,
+  "changed": [],
+  "testModified": false,
+  "evidence": {
+   "ranTests": true,
+   "identified": false,
+   "timedOut": false
+  }
+ }
+}

@@ -1,0 +1,37 @@
+{
+  "model": "hf.co/llm-jp/llm-jp-4-8b-thinking-gguf",
+  "digest": "9b449412f45b",
+  "ranAt": "2026-07-27T16:54:15.108Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "1000000.0",
+      "chars": 0
+    },
+    {
+      "id": "A2",
+      "tokS": "1000000.0",
+      "chars": 0
+    },
+    {
+      "id": "B1",
+      "tokS": "1000000.0",
+      "chars": 0
+    },
+    {
+      "id": "B2",
+      "tokS": "1000000.0",
+      "chars": 0
+    },
+    {
+      "id": "C1",
+      "tokS": "1000000.0",
+      "chars": 0
+    },
+    {
+      "id": "C2",
+      "tokS": "1000000.0",
+      "chars": 0
+    }
+  ]
+}

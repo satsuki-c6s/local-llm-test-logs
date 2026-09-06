@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo App</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #task-list { list-style-type: none; padding: 0; }
+        #task-list li { display: flex; align-items: center; margin-bottom: 5px; }
+        #task-list li.completed label { text-decoration: line-through; color: gray; }
+        .controls { margin-bottom: 10px; }
+        .filters button { margin-right: 5px; }
+    </style>
+</head>
+<body>
+    <h1>ToDo App</h1>
+    <div class="controls">
+        <input type="text" id="task-input" placeholder="新しいタスクを追加...">
+        <button onclick="addTask()">追加</button>
+        <span id="remaining-count">0 件の未完了タスク</span>
+    </div>
+    <div class="filters">
+        <button onclick="filterTasks('all')">すべて</button>
+        <button onclick="filterTasks('active')">未完了</button>
+        <button onclick="filterTasks('completed')">完了</button>
+    </div>
+    <ul id="task-list"></ul>
+
+    <script>
+        const taskList = document.getElementById('task-list');
+        const taskInput = document.getElementById('task-input');
+        const remainingCount = document.getElementById('remaining-count');
+
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+        function renderTasks() {
+            taskList.innerHTML = '';
+            tasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                li.className = task.completed ? 'completed' : '';
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = task.completed;
+                checkbox.onchange = () => toggleTaskCompletion(index);
+
+                const label = document.createElement('label');
+                label.textContent = task.text;
+                label.ondblclick = () => editTask(index, label);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = '削除';
+                deleteButton.onclick = () => deleteTask(index);
+
+                li.appendChild(checkbox);
+                li.appendChild(label);
+                li.appendChild(deleteButton);
+                taskList.appendChild(li);
+            });
+            updateRemainingCount();
+        }
+
+        function addTask() {
+            const text = taskInput.value.trim();
+            if (text) {
+                tasks.push({ text, completed: false });
+                taskInput.value = '';
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        function toggleTaskCompletion(index) {
+            tasks[index].completed = !tasks[index].completed;
+            saveTasks();
+            renderTasks();
+        }
+
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            saveTasks();
+            renderTasks();
+        }
+
+        function editTask(index, label) {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = tasks[index].text;
+            input.onblur = () => {
+                tasks[index].text = input.value.trim() || tasks[index].text;
+                saveTasks();
+                renderTasks();
+            };
+            label.parentNode.replaceChild(input, label);
+            input.focus();
+        }
+
+        function filterTasks(filter) {
+            taskList.querySelectorAll('li').forEach(li => {
+                const isCompleted = li.classList.contains('completed');
+                if (filter === 'all' || 
+                    (filter === 'active' && !isCompleted) || 
+                    (filter === 'completed' && isCompleted)) {
+                    li.style.display = '';
+                } else {
+                    li.style.display = 'none';
+                }
+            });
+        }
+
+        function updateRemainingCount() {
+            const count = tasks.filter(task => !task.completed).length;
+            remainingCount.textContent = `${count} 件の未完了タスク`;
+        }
+
+        function saveTasks() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        renderTasks();
+    </script>
+</body>
+</html>

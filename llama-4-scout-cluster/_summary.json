@@ -1,0 +1,42 @@
+{
+  "model": "Llama-4-Scout-17B-16E-Instruct-UD-Q4_K_XL (mesh-llm クラスタ・4台参加)",
+  "runAt": "2026-08-08",
+  "results": [
+    {
+      "id": "A1",
+      "seconds": 26,
+      "finishReason": "stop",
+      "contentChars": 1469
+    },
+    {
+      "id": "A2",
+      "seconds": 4,
+      "finishReason": "stop",
+      "contentChars": 119
+    },
+    {
+      "id": "B1",
+      "seconds": 6,
+      "finishReason": "stop",
+      "contentChars": 196
+    },
+    {
+      "id": "B2",
+      "seconds": 9,
+      "finishReason": "stop",
+      "contentChars": 222
+    },
+    {
+      "id": "C1",
+      "seconds": 40,
+      "finishReason": "stop",
+      "contentChars": 2449
+    },
+    {
+      "id": "C2",
+      "seconds": 6,
+      "finishReason": "stop",
+      "contentChars": 188
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "model": "hf.co/ornith-ai/Ornith-1.5-35B-A3B-GGUF:Q4_K_M",
+  "digest": "67a4c8ba6a74",
+  "ranAt": "2026-08-20T01:44:36.661Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "255.8",
+      "chars": 2843
+    },
+    {
+      "id": "A2",
+      "tokS": "253.4",
+      "chars": 143
+    },
+    {
+      "id": "B1",
+      "tokS": "259.1",
+      "chars": 619
+    },
+    {
+      "id": "B2",
+      "tokS": "256.9",
+      "chars": 582
+    },
+    {
+      "id": "C1",
+      "tokS": "255.3",
+      "chars": 718
+    },
+    {
+      "id": "C2",
+      "tokS": "243.8",
+      "chars": 83
+    }
+  ]
+}

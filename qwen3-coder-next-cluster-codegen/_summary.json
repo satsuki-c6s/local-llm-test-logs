@@ -1,0 +1,32 @@
+{
+  "series": "codegen (実アプリ3課題の一発生成) — クラスタ編",
+  "model": "Qwen3-Coder-Next (Q4_K_XL 49.9GB / 48層, Apache-2.0, GPU4台クラスタ)",
+  "runAt": "2026-08-10",
+  "note": "Qwen3-Next-80B-Thinking の T1 は初回が配信側エラー (出力ゼロ) のため同条件で再実行した1回分。他は全て初回",
+  "results": [
+    {
+      "id": "T1",
+      "label": "ToDoアプリ",
+      "seconds": 812,
+      "tokPerSec": null,
+      "doneReason": "stop",
+      "htmlLines": 438
+    },
+    {
+      "id": "T2",
+      "label": "ブロック崩し",
+      "seconds": 628,
+      "tokPerSec": null,
+      "doneReason": "stop",
+      "htmlLines": 349
+    },
+    {
+      "id": "T3",
+      "label": "軌道シミュレーター",
+      "seconds": 551,
+      "tokPerSec": null,
+      "doneReason": "stop",
+      "htmlLines": 303
+    }
+  ]
+}

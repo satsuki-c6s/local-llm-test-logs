@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ToDoアプリ</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+    background: #f0f2f5;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px;
+  }
+
+  .app {
+    width: 100%;
+    max-width: 480px;
+  }
+
+  h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 28px;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  #task-input {
+    flex: 1;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+  }
+
+  #task-input:focus {
+    border-color: #4a90d9;
+  }
+
+  #add-btn {
+    padding: 12px 20px;
+    font-size: 16px;
+    background: #4a90d9;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  #add-btn:hover {
+    background: #3a7bc0;
+  }
+
+  .filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .filter-btn {
+    flex: 1;
+    padding: 8px;
+    font-size: 14px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .filter-btn.active {
+    background: #4a90d9;
+    color: #fff;
+    border-color: #4a90d9;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  li input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  li .text {
+    flex: 1;
+    font-size: 16px;
+    color: #333;
+    word-break: break-all;
+    cursor: pointer;
+  }
+
+  li.done .text {
+    text-decoration: line-through;
+    color: #aaa;
+  }
+
+  li .edit-input {
+    flex: 1;
+    font-size: 16px;
+    padding: 4px 8px;
+    border: 1px solid #4a90d9;
+    border-radius: 4px;
+    outline: none;
+  }
+
+  li .delete-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #e05555;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 4px;
+  }
+
+  li .delete-btn:hover {
+    color: #b03030;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .empty-msg {
+    text-align: center;
+    color: #999;
+    padding: 24px 0;
+    font-size: 15px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>📝 ToDo</h1>
+
+  <div class="input-row">
+    <input type="text" id="task-input" placeholder="タスクを入力..." maxlength="200">
+    <button id="add-btn">追加</button>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">すべて</button>
+    <button class="filter-btn" data-filter="active">未完了</button>
+    <button class="filter-btn" data-filter="completed">完了</button>
+  </div>
+
+  <ul id="task-list"></ul>
+
+  <div class="footer">
+    <span id="remaining-count"></span>
+    <span>ダブルクリックで編集</span>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  const STORAGE_KEY = "todo-app-tasks";
+
+  let tasks = loadTasks();
+  let currentFilter = "all";
+  let editingId = null;
+
+  const inputEl = document.getElementById("task-input");
+  const addBtn = document.getElementById("add-btn");
+  const listEl = document.getElementById("task-list");
+  const countEl = document.getElementById("remaining-count");
+  const filterBtns = document.querySelectorAll(".filter-btn");
+
+  // ---- 保存 / 読み込み ----
+  function loadTasks() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveTasks() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    } catch (e) {
+      // 保存できない環境でも動作は継続
+    }
+  }
+
+  // ---- 操作 ----
+  function addTask(text) {
+    tasks.push({
+      id: Date.now() + "-" + Math.random().toString(36).slice(2, 8),
+      text: text,
+      done: false
+    });
+    saveTasks();
+    render();
+  }
+
+  function toggleTask(id) {
+    const task = tasks.find(t => t.id === id);
+    if (task) {
+      task.done = !task.done;
+      saveTasks();
+      render();
+    }
+  }
+
+  function deleteTask(id) {
+    tasks = tasks.filter(t => t.id !== id);
+    if (editingId === id) editingId = null;
+    saveTasks();
+    render();
+  }
+
+  function updateTask(id, text) {
+    const task = tasks.find(t => t.id === id);
+    if (task) {
+      task.text = text;
+      saveTasks();
+    }
+    editingId = null;
+    render();
+  }
+
+  function setFilter(filter) {
+    currentFilter = filter;
+    filterBtns.forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.filter === filter);
+    });
+    render();
+  }
+
+  // ---- 描画 ----
+  function getVisibleTasks() {
+    if (currentFilter === "active") return tasks.filter(t => !t.done);
+    if (currentFilter === "completed") return tasks.filter(t => t.done);
+    return tasks;
+  }
+
+  function render() {
+    listEl.innerHTML = "";
+
+    const visible = getVisibleTasks();
+
+    if (visible.length === 0) {
+      const msg = document.createElement("div");
+      msg.className = "empty-msg";
+      msg.textContent =
+        currentFilter === "active" ? "未完了のタスクはありません" :
+        currentFilter === "completed" ? "完了したタスクはありません" :
+        "タスクがありません。追加してみましょう！";
+      listEl.appendChild(msg);
+    }
+
+    visible.forEach(task => {
+      const li = document.createElement("li");
+      if (task.done) li.classList.add("done");
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = task.done;
+      checkbox.addEventListener("change", () => toggleTask(task.id));
+
+      if (editingId === task.id) {
+        const editInput = document.createElement("input");
+        editInput.type = "text";
+        editInput.className = "edit-input";
+        editInput.value = task.text;
+        editInput.maxLength = 200;
+
+        const commit = () => {
+          const val = editInput.value.trim();
+          if (val) {
+            updateTask(task.id, val);
+          } else {
+            editingId = null;
+            render();
+          }
+        };
+
+        editInput.addEventListener("blur", commit);
+        editInput.addEventListener("keydown", e => {
+          if (e.key === "Enter") commit();
+          if (e.key === "Escape") {
+            editingId = null;
+            render();
+          }
+        });
+
+        li.appendChild(checkbox);
+        li.appendChild(editInput);
+        li.appendChild(createDeleteBtn(task.id));
+        listEl.appendChild(li);
+
+        // 描画後にフォーカス
+        setTimeout(() => {
+          editInput.focus();
+          editInput.select();
+        }, 0);
+      } else {
+        const span = document.createElement("span");
+        span.className = "text";
+        span.textContent = task.text;
+        span.title = "ダブルクリックで編集";
+        span.addEventListener("dblclick", () => {
+          editingId = task.id;
+          render();
+        });
+
+        li.appendChild(checkbox);
+        li.appendChild(span);
+        li.appendChild(createDeleteBtn(task.id));
+        listEl.appendChild(li);
+      }
+    });
+
+    const remaining = tasks.filter(t => !t.done).length;
+    countEl.textContent = "未完了: " + remaining + " 件";
+  }
+
+  function createDeleteBtn(id) {
+    const btn = document.createElement("button");
+    btn.className = "delete-btn";
+    btn.textContent = "✕";
+    btn.title = "削除";
+    btn.addEventListener("click", () => deleteTask(id));
+    return btn;
+  }
+
+  // ---- イベント ----
+  addBtn.addEventListener("click", () => {
+    const text = inputEl.value.trim();
+    if (!text) return;
+    addTask(text);
+    inputEl.value = "";
+    inputEl.focus();
+  });
+
+  inputEl.addEventListener("keydown", e => {
+    if (e.key === "Enter") addBtn.click();
+  });
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener("click", () => setFilter(btn.dataset.filter));
+  });
+
+  // 初期描画
+  render();
+})();
+</script>
+</body>
+</html>

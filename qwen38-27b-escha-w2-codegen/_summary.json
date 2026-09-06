@@ -1,0 +1,31 @@
+{
+  "series": "codegen (実アプリ3課題の一発生成)",
+  "model": "EschaLabs/Qwen3.8-27B-Escha-W2 (escha 2bit 10.15GB, escha SGLang 1.2.0, RTX 5090 単機)",
+  "runAt": "2026-08-25",
+  "results": [
+    {
+      "id": "T1",
+      "label": "ToDoアプリ",
+      "seconds": 28,
+      "tokPerSec": 81.7,
+      "doneReason": "stop",
+      "htmlLines": 285
+    },
+    {
+      "id": "T2",
+      "label": "ブロック崩し",
+      "seconds": 28,
+      "tokPerSec": 82.3,
+      "doneReason": "stop",
+      "htmlLines": 235
+    },
+    {
+      "id": "T3",
+      "label": "軌道シミュレーター",
+      "seconds": 20,
+      "tokPerSec": 82.1,
+      "doneReason": "stop",
+      "htmlLines": 170
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "model": "llm-jp-4-33b-thinking",
+  "runtime": "llama.cpp (/models/sha256-12c23619261c824f88facec565a4b6750d2b0872db7e57f6289ad677822e00dd)",
+  "ftype": "?",
+  "baseUrl": "(公開用に伏せています)",
+  "ranAt": "2026-08-21T01:00:31.628Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "65.5",
+      "chars": 5422,
+      "reasoningChars": 935,
+      "finishReason": "stop"
+    },
+    {
+      "id": "A2",
+      "tokS": "58.5",
+      "chars": 122,
+      "reasoningChars": 724,
+      "finishReason": "stop"
+    },
+    {
+      "id": "B1",
+      "tokS": "64.7",
+      "chars": 666,
+      "reasoningChars": 587,
+      "finishReason": "stop"
+    },
+    {
+      "id": "B2",
+      "tokS": "64.1",
+      "chars": 376,
+      "reasoningChars": 609,
+      "finishReason": "stop"
+    },
+    {
+      "id": "C1",
+      "tokS": "64.3",
+      "chars": 10363,
+      "reasoningChars": 938,
+      "finishReason": "length"
+    },
+    {
+      "id": "C2",
+      "tokS": "64.2",
+      "chars": 52,
+      "reasoningChars": 4154,
+      "finishReason": "stop"
+    }
+  ]
+}

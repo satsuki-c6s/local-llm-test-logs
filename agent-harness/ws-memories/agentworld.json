@@ -1,0 +1,67 @@
+{
+  "model": "hf.co/DevQuasar/Qwen.Qwen-AgentWorld-35B-A3B-GGUF:Q4_K_M",
+  "sessions": [
+    "docs/agent-harness-results/ws-agentworld-r1/t1/session.jsonl",
+    "docs/agent-harness-results/ws-agentworld-r1/t2/session.jsonl",
+    "docs/agent-harness-results/ws-agentworld-r1/t3/session.jsonl"
+  ],
+  "generatedAt": "2026-08-31T22:48:42.825Z",
+  "wikiAttempts": 1,
+  "skillAttempts": 1,
+  "patternsRaw": [
+    {
+      "name": "powershell-command-separator-syntax",
+      "observation": "The agent repeatedly used `&&` to chain commands in `exec` tool calls, which resulted in a PowerShell `ParserError` because PowerShell requires `;` for command separation in this context. The agent successfully resolved the issue by replacing `&&` with `;` or using separate `exec` calls.",
+      "guidance": "When using the `exec` tool with PowerShell on Windows, use `;` instead of `&&` to chain commands, or issue separate `exec` calls for each command to avoid parser errors."
+    },
+    {
+      "name": "python-and-unix-utilities-unavailable",
+      "observation": "The agent attempted to start an HTTP server using Python commands and use Unix utilities like `head`, but all failed with command not found errors in the PowerShell environment. The agent successfully started a server using Node.js built-in modules and verified the HTTP response using the PowerShell cmdlet `Invoke-WebRequest`.",
+      "guidance": "When Python or common Unix CLI utilities are unavailable in the PowerShell environment, use Node.js built-in modules to create servers or perform HTTP requests, and use PowerShell cmdlets like `Invoke-WebRequest` or `Get-Content` instead of Unix commands."
+    }
+  ],
+  "patterns": [
+    {
+      "name": "powershell-command-separator-syntax",
+      "observation": "The agent repeatedly used `&&` to chain commands in `exec` tool calls, which resulted in a PowerShell `ParserError` because PowerShell requires `;` for command separation in this context. The agent successfully resolved the issue by replacing `&&` with `;` or using separate `exec` calls.",
+      "guidance": "When using the `exec` tool with PowerShell on Windows, use `;` instead of `&&` to chain commands, or issue separate `exec` calls for each command to avoid parser errors."
+    },
+    {
+      "name": "python-and-unix-utilities-unavailable",
+      "observation": "The agent attempted to start an HTTP server using Python commands and use Unix utilities like `head`, but all failed with command not found errors in the PowerShell environment. The agent successfully started a server using Node.js built-in modules and verified the HTTP response using the PowerShell cmdlet `Invoke-WebRequest`.",
+      "guidance": "When Python or common Unix CLI utilities are unavailable in the PowerShell environment, use Node.js built-in modules to create servers or perform HTTP requests, and use PowerShell cmdlets like `Invoke-WebRequest` or `Get-Content` instead of Unix commands."
+    }
+  ],
+  "patternsExcluded": [],
+  "skillsRaw": [
+    {
+      "name": "powershell-command-separator-syntax",
+      "description": "Use when chaining commands in the `exec` tool with PowerShell on Windows to avoid parser errors caused by using `&&`.",
+      "instructions": "1. Identify any command chaining in `exec` tool calls that uses the `&&` operator.\n2. Replace the `&&` operator with a semicolon `;` to separate commands within the same `exec` call.\n3. Alternatively, issue separate `exec` calls for each individual command instead of chaining them.",
+      "applicability": "Applicable whenever the `exec` tool uses PowerShell as the shell on a Windows machine."
+    },
+    {
+      "name": "nodejs-and-powershell-alternatives-for-unix-tools",
+      "description": "Use when Python or common Unix CLI utilities are unavailable in the PowerShell environment and you need to start servers or perform HTTP requests and file operations.",
+      "instructions": "1. When Python commands or Unix utilities fail with command not found errors in the PowerShell environment, switch to Node.js or PowerShell built-in alternatives.\n2. Use Node.js built-in modules via inline Node.js execution to create local HTTP servers or perform necessary file and network operations.\n3. Use PowerShell cmdlets like `Invoke-WebRequest` or `Get-Content` to verify HTTP responses or read file contents instead of using Unix commands.",
+      "applicability": "Applicable when working in a PowerShell environment on Windows where Python and standard Unix CLI utilities are not available."
+    }
+  ],
+  "skills": [
+    {
+      "name": "powershell-command-separator-syntax",
+      "description": "Use when chaining commands in the `exec` tool with PowerShell on Windows to avoid parser errors caused by using `&&`.",
+      "instructions": "1. Identify any command chaining in `exec` tool calls that uses the `&&` operator.\n2. Replace the `&&` operator with a semicolon `;` to separate commands within the same `exec` call.\n3. Alternatively, issue separate `exec` calls for each individual command instead of chaining them.",
+      "applicability": "Applicable whenever the `exec` tool uses PowerShell as the shell on a Windows machine."
+    },
+    {
+      "name": "nodejs-and-powershell-alternatives-for-unix-tools",
+      "description": "Use when Python or common Unix CLI utilities are unavailable in the PowerShell environment and you need to start servers or perform HTTP requests and file operations.",
+      "instructions": "1. When Python commands or Unix utilities fail with command not found errors in the PowerShell environment, switch to Node.js or PowerShell built-in alternatives.\n2. Use Node.js built-in modules via inline Node.js execution to create local HTTP servers or perform necessary file and network operations.\n3. Use PowerShell cmdlets like `Invoke-WebRequest` or `Get-Content` to verify HTTP responses or read file contents instead of using Unix commands.",
+      "applicability": "Applicable when working in a PowerShell environment on Windows where Python and standard Unix CLI utilities are not available."
+    }
+  ],
+  "skillsExcluded": [],
+  "wikiRawOutput": "# Pattern 1\n## Name\npowershell-command-separator-syntax\n## Observation\nThe agent repeatedly used `&&` to chain commands in `exec` tool calls, which resulted in a PowerShell `ParserError` because PowerShell requires `;` for command separation in this context. The agent successfully resolved the issue by replacing `&&` with `;` or using separate `exec` calls.\n## Guidance\nWhen using the `exec` tool with PowerShell on Windows, use `;` instead of `&&` to chain commands, or issue separate `exec` calls for each command to avoid parser errors.\n\n# Pattern 2\n## Name\npython-and-unix-utilities-unavailable\n## Observation\nThe agent attempted to start an HTTP server using Python commands and use Unix utilities like `head`, but all failed with command not found errors in the PowerShell environment. The agent successfully started a server using Node.js built-in modules and verified the HTTP response using the PowerShell cmdlet `Invoke-WebRequest`.\n## Guidance\nWhen Python or common Unix CLI utilities are unavailable in the PowerShell environment, use Node.js built-in modules to create servers or perform HTTP requests, and use PowerShell cmdlets like `Invoke-WebRequest` or `Get-Content` instead of Unix commands.",
+  "skillRawOutput": "# Skill 1\n## Name\npowershell-command-separator-syntax\n## Description\nUse when chaining commands in the `exec` tool with PowerShell on Windows to avoid parser errors caused by using `&&`.\n## Instructions\n1. Identify any command chaining in `exec` tool calls that uses the `&&` operator.\n2. Replace the `&&` operator with a semicolon `;` to separate commands within the same `exec` call.\n3. Alternatively, issue separate `exec` calls for each individual command instead of chaining them.\n## Applicability\nApplicable whenever the `exec` tool uses PowerShell as the shell on a Windows machine.\n\n# Skill 2\n## Name\nnodejs-and-powershell-alternatives-for-unix-tools\n## Description\nUse when Python or common Unix CLI utilities are unavailable in the PowerShell environment and you need to start servers or perform HTTP requests and file operations.\n## Instructions\n1. When Python commands or Unix utilities fail with command not found errors in the PowerShell environment, switch to Node.js or PowerShell built-in alternatives.\n2. Use Node.js built-in modules via inline Node.js execution to create local HTTP servers or perform necessary file and network operations.\n3. Use PowerShell cmdlets like `Invoke-WebRequest` or `Get-Content` to verify HTTP responses or read file contents instead of using Unix commands.\n## Applicability\nApplicable when working in a PowerShell environment on Windows where Python and standard Unix CLI utilities are not available."
+}

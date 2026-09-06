@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .task-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .task-item {
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .task-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .task-item button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+        .task-item button:hover {
+            background-color: #45a049;
+        }
+        .filter-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .filter-button label {
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+        .filter-button input[type="radio"] {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>To Do List</h1>
+    <input type="text" id="task-input" placeholder="Enter task...">
+    <button onclick="addTask()">Add Task</button>
+    <ul class="task-list"></ul>
+    <div class="filter-buttons">
+        <label for="all">All</label>
+        <input type="radio" id="all-filter" name="filter" checked>
+        <label for="pending">Pending</label>
+        <input type="radio" id="pending-filter" name="filter">
+        <label for="completed">Completed</label>
+        <input type="radio" id="completed-filter" name="filter">
+    </div>
+    <p>Tasks left: <span id="task-count"></span></p>
+
+    <script>
+        let tasks = [];
+
+        function addTask() {
+            const taskInput = document.getElementById('task-input');
+            const taskText = taskInput.value.trim();
+
+            if (taskText !== '') {
+                tasks.push({
+                    text: taskText,
+                    completed: false
+                });
+
+                renderTasks();
+                taskInput.value = '';
+            }
+        }
+
+        function renderTasks() {
+            const taskList = document.querySelector('.task-list');
+            taskList.innerHTML = '';
+
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.className = 'task-item';
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = task.completed;
+                checkbox.addEventListener('change', () => toggleTask(task));
+
+                const label = document.createElement('label');
+                label.textContent = task.text;
+
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Edit';
+                editButton.addEventListener('click', () => editTask(task));
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', () => deleteTask(task));
+
+                li.appendChild(checkbox);
+                li.appendChild(label);
+                li.appendChild(editButton);
+                li.appendChild(deleteButton);
+
+                taskList.appendChild(li);
+            });
+
+            updateTaskCount();
+        }
+
+        function toggleTask(task) {
+            task.completed = !task.completed;
+            renderTasks();
+        }
+
+        function editTask(task) {
+            const taskInput = document.createElement('input');
+            taskInput.type = 'text';
+            taskInput.value = task.text;
+            taskInput.addEventListener('blur', () => updateTask(task, taskInput.value));
+
+            const confirmButton = document.createElement('button');
+            confirmButton.textContent = 'Confirm';
+            confirmButton.addEventListener('click', () => {
+                task.text = taskInput.value;
+                renderTasks();
+                taskInput.remove();
+            });
+
+            const cancelButton = document.createElement('button');
+            cancelButton.textContent = 'Cancel';
+            cancelButton.addEventListener('click', () => taskInput.remove());
+
+            taskList.replaceChild(taskInput, document.querySelector('.task-item label'));
+            taskList.appendChild(confirmButton);
+            taskList.appendChild(cancelButton);
+        }
+
+        function deleteTask(task) {
+            tasks = tasks.filter(t => t !== task);
+            renderTasks();
+        }
+
+        function updateTaskCount() {
+            const taskList = document.querySelector('.task-list');
+            const pendingTasks = tasks.filter(t => !t.completed).length;
+            const completedTasks = tasks.filter(t => t.completed).length;
+
+            document.getElementById('task-count').textContent = `${pendingTasks} / ${tasks.length}`;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const allFilter = document.getElementById('all-filter');
+            const pendingFilter = document.getElementById('pending-filter');
+            const completedFilter = document.getElementById('completed-filter');
+
+            allFilter.addEventListener('change', () => filterTasks());
+            pendingFilter.addEventListener('change', () => filterTasks());
+            completedFilter.addEventListener('change', () => filterTasks());
+
+            function filterTasks() {
+                const filterValue = document.querySelector('input[name="filter"]:checked').value;
+                let filteredTasks;
+
+                switch (filterValue) {
+                    case 'all':
+                        filteredTasks = tasks;
+                        break;
+                    case 'pending':
+                        filteredTasks = tasks.filter(t => !t.completed);
+                        break;
+                    case 'completed':
+                        filteredTasks = tasks.filter(t => t.completed);
+                        break;
+                }
+
+                renderTasks(filteredTasks);
+            }
+        });
+    </script>
+</body>
+</html>

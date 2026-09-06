@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ブロック崩しゲーム</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 2px solid #333;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="600" height="400"></canvas>
+
+    <script>
+        // キャンバスとコンテキストの取得
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // ゲーム状態
+        let gameState = 'playing'; // 'playing', 'clear', 'over'
+        let score = 0;
+        let blocksLeft = 0;
+
+        // ボールのプロパティ
+        const ball = {
+            x: canvas.width / 2,
+            y: canvas.height - 30,
+            radius: 10,
+            speedX: 4,
+            speedY: -4,
+            color: '#FF5733'
+        };
+
+        // パドルのプロパティ
+        const paddle = {
+            x: canvas.width / 2 - 50,
+            y: canvas.height - 20,
+            width: 100,
+            height: 10,
+            speed: 8,
+            color: '#33FF57'
+        };
+
+        // ブロックのプロパティ
+        const block = {
+            row: 4,
+            col: 8,
+            width: canvas.width / 8 - 2,
+            height: 20,
+            padding: 1,
+            marginTop: 60,
+            marginLeft: 1,
+            color: '#3357FF',
+            colors: ['#FF5733', '#33FF57', '#3357FF', '#F3FF33']
+        };
+
+        // ブロックの配列
+        let blocks = [];
+
+        // キー入力の状態
+        const keys = {
+            left: false,
+            right: false
+        };
+
+        // イベントリスナーの設定
+        document.addEventListener('keydown', keyDownHandler);
+        document.addEventListener('keyup', keyUpHandler);
+
+        function keyDownHandler(e) {
+            if (e.key === 'ArrowLeft') keys.left = true;
+            if (e.key === 'ArrowRight') keys.right = true;
+        }
+
+        function keyUpHandler(e) {
+            if (e.key === 'ArrowLeft') keys.left = false;
+            if (e.key === 'ArrowRight') keys.right = false;
+        }
+
+        // 初期化
+        function init() {
+            createBlocks();
+            blocksLeft = block.row * block.col;
+        }
+
+        // ブロックの作成
+        function createBlocks() {
+            for (let r = 0; r < block.row; r++) {
+                blocks[r] = [];
+                for (let c = 0; c < block.col; c++) {
+                    const blockColor = block.colors[r % block.colors.length];
+                    blocks[r][c] = {
+                        x: c * (block.width + block.padding) + block.marginLeft,
+                        y: r * (block.height + block.padding) + block.marginTop,
+                        width: block.width,
+                        height: block.height,
+                        color: blockColor,
+                        visible: true
+                    };
+                }
+            }
+        }
+
+        // ゲームの更新
+        function update() {
+            if (gameState !== 'playing') return;
+
+            // パドルの移動
+            if (keys.left && paddle.x > 0) {
+                paddle.x -= paddle.speed;
+            }
+            if (keys.right && paddle.x < canvas.width - paddle.width) {
+                paddle.x += paddle.speed;
+            }
+
+            // ボールの移動
+            ball.x += ball.speedX;
+            ball.y += ball.speedY;
+
+            // 壁と天井の衝突判定
+            if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+                ball.speedX = -ball.speedX;
+            }
+            if (ball.y - ball.radius < 0) {
+                ball.speedY = -ball.speedY;
+            }
+
+            // パドルとの衝突判定
+            if (
+                ball.y + ball.radius > paddle.y &&
+                ball.x > paddle.x && ball.x < paddle.x + paddle.width
+            ) {
+                ball.speedY = -ball.speedY;
+
+                // パドルの中心に近いほど角度を調整
+                const hitPosition = (ball.x - (paddle.x + paddle.width / 2)) / (paddle.width / 2);
+                ball.speedX = hitPosition * 5;
+            }
+
+            // ブロックとの衝突判定
+            for (let r = 0; r < block.row; r++) {
+                for (let c = 0; c < block.col; c++) {
+                    const b = blocks[r][c];
+                    if (b.visible) {
+                        if (
+                            ball.x + ball.radius > b.x &&
+                            ball.x - ball.radius < b.x + b.width &&
+                            ball.y + ball.radius > b.y &&
+                            ball.y - ball.radius < b.y + b.height
+                        ) {
+                            // ブロックの上下から当たった場合はY方向反転、左右から当たった場合はX方向反転
+                            if (ball.x > b.x && ball.x < b.x + b.width) {
+                                ball.speedY = -ball.speedY;
+                            } else {
+                                ball.speedX = -ball.speedX;
+                            }
+
+                            // ブロックを非表示にし、スコアと残りブロック数を更新
+                            b.visible = false;
+                            score += 10;
+                            blocksLeft--;
+                        }
+                    }
+                }
+            }
+
+            // ボールが画面下に落ちた場合
+            if (ball.y + ball.radius > canvas.height) {
+                gameState = 'over';
+            }
+
+            // 全てのブロックを消した場合
+            if (blocksLeft <= 0 && gameState === 'playing') {
+                gameState = 'clear';
+            }
+        }
+
+        // 描画
+        function draw() {
+            // キャンバスをクリア
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // ブロックの描画
+            for (let r = 0; r < block.row; r++) {
+                for (let c = 0; c < block.col; c++) {
+                    if (blocks[r][c].visible) {
+                        ctx.fillStyle = blocks[r][c].color;
+                        ctx.fillRect(blocks[r][c].x, blocks[r][c].y, blocks[r][c].width, blocks[r][c].height);
+                    }
+                }
+            }
+
+            // パドルの描画
+            ctx.fillStyle = paddle.color;
+            ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+
+            // ボールの描画
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fillStyle = ball.color;
+            ctx.fill();
+            ctx.closePath();
+
+            // スコアの表示
+            ctx.fillStyle = '#333';
+            ctx.font = '16px Arial';
+            ctx.fillText(`スコア: ${score}`, 8, 20);
+
+            // ゲーム状態の表示
+            if (gameState === 'clear') {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#33FF57';
+                ctx.font = '48px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('クリア！', canvas.width / 2, canvas.height / 2);
+                ctx.font = '16px Arial';
+                ctx.fillText(`最終スコア: ${score}`, canvas.width / 2, canvas.height / 2 + 40);
+            } else if (gameState === 'over') {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#FF5733';
+                ctx.font = '48px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('ゲームオーバー', canvas.width / 2, canvas.height / 2);
+                ctx.font = '16px Arial';
+                ctx.fillText(`スコア: ${score}`, canvas.width / 2, canvas.height / 2 + 40);
+            }
+
+            ctx.textAlign = 'left';
+        }
+
+        // メインゲームループ
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // ゲーム開始
+        init();
+        gameLoop();
+    </script>
+</body>
+</html>

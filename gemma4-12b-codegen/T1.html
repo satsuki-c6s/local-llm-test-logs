@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple ToDo App</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --danger-color: #e74c3c;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, "Hiragino Kaku Gothic ProN", "Segoe UI", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary-color);
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        .filter-group {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            background-color: #eee;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .stats {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: #666;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            gap: 10px;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        .todo-text {
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .todo-text.completed {
+            text-decoration: line-through;
+            color: #aaa;
+        }
+
+        .delete-btn {
+            background-color: var(--danger-color);
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+
+        .hint {
+            font-size: 0.7rem;
+            color: #999;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>ToDo List</h1>
+    
+    <div class="input-group">
+        <input type="text" id="todoInput" placeholder="タスクを入力してください..." maxlength="100">
+        <button id="addBtn">追加</button>
+    </div>
+
+    <div class="filter-group">
+        <button class="filter-btn active" data-filter="all">すべて</button>
+        <button class="filter-btn" data-filter="incomplete">未完了</button>
+        <button class="filter-btn" data-filter="completed">完了</button>
+    </div>
+
+    <div class="stats">
+        未完了タスク: <span id="incompleteCount">0</span>
+    </div>
+
+    <ul id="todoList"></ul>
+    
+    <p class="hint">※ タスクをダブルクリックで編集できます</p>
+</div>
+
+<script>
+    // --- State Management ---
+    let todos = JSON.parse(localStorage.getItem('todos')) || [];
+    let currentFilter = 'all';
+
+    const todoInput = document.getElementById('todoInput');
+    const addBtn = document.getElementById('addBtn');
+    const todoList = document.getElementById('todoList');
+    const incompleteCountSpan = document.getElementById('incompleteCount');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+
+    // --- Core Functions ---
+
+    // Save to LocalStorage
+    function save() {
+        localStorage.setItem('todos', JSON.stringify(todos));
+        render();
+    }
+
+    // Render the UI
+    function render() {
+        // Update Count
+        const incompleteCount = todos.filter(t => !t.completed).length;
+        incompleteCountSpan.textContent = incompleteCount;
+
+        // Filter Logic
+        const filteredTodos = todos.filter(todo => {
+            if (currentFilter === 'incomplete') return !todo.completed;
+            if (currentFilter === 'completed') return todo.completed;
+            return true;
+        });
+
+        // Render List
+        todoList.innerHTML = '';
+        filteredTodos.forEach((todo, index) => {
+            const li = document.createElement('li');
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = todo.completed;
+            checkbox.onchange = () => {
+                todo.completed = !todo.completed;
+                save();
+            };
+
+            const span = document.createElement('span');
+            span.className = `todo-text ${todo.completed ? 'completed' : ''}`;
+            span.textContent = todo.text;
+            // Double click to edit
+            span.ondblclick = () => {
+                const newText = prompt("タスクを編集してください:", todo.text);
+                if (newText !== null && newText.trim() !== "") {
+                    todo.text = newText.trim();
+                    save();
+                }
+            };
+
+            const delBtn = document.createElement('button');
+            delBtn.textContent = '削除';
+            delBtn.className = 'delete-btn';
+            delBtn.onclick = () => {
+                // Find original index in the full list (not just filtered)
+                const actualIndex = todos.indexOf(todo);
+                todos.splice(actualIndex, 1);
+                save();
+            };
+
+            li.appendChild(checkbox);
+            li.appendChild(span);
+            li.appendChild(delBtn);
+            todoList.appendChild(li);
+        });
+    }
+
+    // Add Todo
+    function addTodo() {
+        const text = todoInput.value.trim();
+        if (text) {
+            todos.push({
+                id: Date.now(),
+                text: text,
+                completed: false
+            });
+            todoInput.value = '';
+            save();
+        }
+    }
+
+    // Event Listeners
+    addBtn.addEventListener('click', addTodo);
+
+    todoInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') addTodo();
+    });
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Update active button UI
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Change filter state
+            currentFilter = btn.dataset.filter;
+            render();
+        });
+    });
+
+    // Initial Render
+    render();
+</script>
+
+</body>
+</html>

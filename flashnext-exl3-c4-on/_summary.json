@@ -1,0 +1,65 @@
+{
+  "model": "flashnext-exl3-3.05bpw",
+  "runtime": "exllamav3/TabbyAPI (flashnext-exl3-3.05bpw) max_seq_len=32768 cache=FP16",
+  "ftype": "exl3",
+  "baseUrl": "(公開用に伏せています)",
+  "thinking": "on",
+  "maxTokens": 24576,
+  "ranAt": "2026-09-03T03:55:47.055Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "4.4",
+      "chars": 2056,
+      "reasoningChars": 26871,
+      "finishReason": "stop",
+      "completionTokens": 3361,
+      "thinkTagLeak": false
+    },
+    {
+      "id": "A2",
+      "tokS": "4.4",
+      "chars": 160,
+      "reasoningChars": 521,
+      "finishReason": "stop",
+      "completionTokens": 199,
+      "thinkTagLeak": false
+    },
+    {
+      "id": "B1",
+      "tokS": "4.0",
+      "chars": 87,
+      "reasoningChars": 406,
+      "finishReason": "stop",
+      "completionTokens": 155,
+      "thinkTagLeak": false
+    },
+    {
+      "id": "B2",
+      "tokS": "4.5",
+      "chars": 160,
+      "reasoningChars": 1566,
+      "finishReason": "stop",
+      "completionTokens": 676,
+      "thinkTagLeak": false
+    },
+    {
+      "id": "C1",
+      "tokS": "3.8",
+      "chars": 4962,
+      "reasoningChars": 17513,
+      "finishReason": "stop",
+      "completionTokens": 2811,
+      "thinkTagLeak": false
+    },
+    {
+      "id": "C2",
+      "tokS": "0.8",
+      "chars": 0,
+      "reasoningChars": 51652,
+      "finishReason": "length",
+      "completionTokens": 2108,
+      "thinkTagLeak": false
+    }
+  ]
+}

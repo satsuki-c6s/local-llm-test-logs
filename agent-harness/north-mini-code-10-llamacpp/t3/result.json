@@ -1,0 +1,81 @@
+{
+ "series": "agent-harness",
+ "slug": "north-mini-code-10-llamacpp",
+ "model": "north-mini",
+ "task": "t3",
+ "harness": "OpenClaw 2026.7.1-2 (0790d9f)",
+ "thinking": "off",
+ "timeoutSec": 900,
+ "forcedExit": false,
+ "agentDoneAt": null,
+ "sessionId": "a5215a69-189b-49ff-b442-06f3aff10ecc",
+ "startedAt": "2026-08-31T04:23:41.066Z",
+ "wallMs": 53941,
+ "exitCode": 4294967295,
+ "timedOut": false,
+ "agentJsonPresent": false,
+ "durationMs_route1": null,
+ "stopReason_route1": null,
+ "toolSummary_route1": null,
+ "skillsInjected_route1": null,
+ "toolsSeen_route1": null,
+ "assistantMsgs_route2": 18,
+ "toolCounts_route2": {
+  "read": 2,
+  "exec": 13,
+  "write": 2,
+  "process": 1
+ },
+ "toolCallsTotal_route2": 18,
+ "loopSuspect": false,
+ "externalRemotes": [],
+ "vramMaxMiB": 23614,
+ "workspaceDiff": [
+  "A server.js",
+  "A todo.html",
+  "D .gitkeep"
+ ],
+ "selfCheck": {
+  "served": true,
+  "fetched": true,
+  "both": true
+ },
+ "judge": {
+  "task": "T3",
+  "grade": "△",
+  "reason": "2 要件欠け",
+  "reqs": {
+   "add": true,
+   "toggle": true,
+   "delete": true,
+   "persist": true,
+   "edit": true,
+   "filter": false,
+   "count": false
+  },
+  "exists": true,
+  "htmlBytes": 14173,
+  "rowDetect": {
+   "rowTag": "LI",
+   "rowClass": "task-item ",
+   "parentTag": "UL"
+  },
+  "addedCount": 2,
+  "added": true,
+  "toggleFound": true,
+  "rowStateBefore": "active",
+  "rowStateAfter": "done",
+  "toggled": true,
+  "counterText": null,
+  "counterHasOne": false,
+  "editPersistedInLs": true,
+  "visOnActiveFilter": null,
+  "visOnDoneFilter": null,
+  "filterOK": false,
+  "countAfterReload": 3,
+  "persistedAfterReload": true,
+  "countAfterDelete": 2,
+  "deletedWorks": true,
+  "pageErrors": []
+ }
+}

@@ -1,0 +1,31 @@
+{
+  "series": "codegen (実アプリ3課題の一発生成)",
+  "model": "qwen2.5-coder:7b (Ollama, Q4_K_M 4.7GB, RTX 5090 単機)",
+  "runAt": "2026-08-08",
+  "results": [
+    {
+      "id": "T1",
+      "label": "ToDoアプリ",
+      "seconds": 8,
+      "tokPerSec": 222,
+      "doneReason": "stop",
+      "htmlLines": 122
+    },
+    {
+      "id": "T2",
+      "label": "ブロック崩し",
+      "seconds": 6,
+      "tokPerSec": 223,
+      "doneReason": "stop",
+      "htmlLines": 173
+    },
+    {
+      "id": "T3",
+      "label": "軌道シミュレーター",
+      "seconds": 4,
+      "tokPerSec": 222.6,
+      "doneReason": "stop",
+      "htmlLines": 105
+    }
+  ]
+}

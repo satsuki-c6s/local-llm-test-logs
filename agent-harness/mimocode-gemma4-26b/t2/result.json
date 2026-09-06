@@ -1,0 +1,59 @@
+{
+ "series": "agent-harness",
+ "slug": "mimocode-gemma4-26b",
+ "model": "gemma4-26b-ctx64k",
+ "task": "t2",
+ "harness": "MiMoCode 0.1.14 (@mimo-ai/cli・mimo run --yolo --pure・custom provider @ai-sdk/openai-compatible)",
+ "route": "custom (openai-compatible) → http://127.0.0.1:11434/v1",
+ "timeoutSec": 900,
+ "sessionID": "ses_-ffe5f8bae7726ffe71jGHZwGi",
+ "sessionTitle": "mimocode-gemma4-26b-t2-2026-09-06T01-24-54-414Z",
+ "startedAt": "2026-09-06T01:24:54.422Z",
+ "wallMs": 13401,
+ "exitCode": 0,
+ "timedOut": false,
+ "assistantMsgs": 2,
+ "steps": 8,
+ "toolCounts": {
+  "bash": 1,
+  "read": 4,
+  "grep": 1,
+  "write": 1
+ },
+ "toolCallsTotal": 7,
+ "externalRemotes": [
+  "2606:4700::6810:222:443 (mimo)",
+  "47.236.231.113:443 (mimo)"
+ ],
+ "vramMaxMiB": 24398,
+ "workspaceDiff": [
+  "A report.json"
+ ],
+ "selfCheck": null,
+ "judge": {
+  "task": "T2",
+  "grade": "◎",
+  "reason": "8欄すべて正解",
+  "exists": true,
+  "parsed": true,
+  "wrong": [],
+  "values": {
+   "project": "kumoribi-ledger",
+   "version": "2.7.3",
+   "port": 47311,
+   "database_file": "data/kumoribi.sqlite",
+   "entrypoint": "src/server.js",
+   "dependencies": [
+    "better-sqlite3",
+    "commander",
+    "yaml"
+   ],
+   "latest_release": {
+    "version": "2.7.3",
+    "date": "2026-07-19"
+   },
+   "todo_count": 4
+  }
+ },
+ "finalResponse": "project フォルダ内のファイルを調査し、指定されたスキーマに従って情報を抽出しました。\npackage.json、server.js、settings.yaml、CHANGELOG.md、および src 内の .js ファイルを解析しました。\n解析した結果に基づき、project/report.json を作成しました。"
+}

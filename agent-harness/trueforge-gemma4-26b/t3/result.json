@@ -1,0 +1,72 @@
+{
+ "series": "agent-harness",
+ "slug": "trueforge-gemma4-26b",
+ "model": "gemma4-26b-ctx64k",
+ "task": "t3",
+ "harness": "TrueForge 0.1.4 (@truefoundry/trueforge standalone・WSL2 Ubuntu・ローカルサンドボックス = sandbox-runtime + bwrap・ツールは exec のみ)",
+ "route": "custom provider ollama → http://127.0.0.1:11434/v1",
+ "timeoutSec": 900,
+ "sessionID": "01m1t6bb1qsedxncjpp2s2zedg",
+ "turnID": "01m1t6bb259pq61hy7eamy8pwb.local",
+ "turnStatus": 200,
+ "turnState": "done",
+ "startedAt": "2026-09-06T01:46:55.419Z",
+ "wallMs": 20861,
+ "timedOut": false,
+ "assistantMsgs": 3,
+ "toolCounts": {
+  "exec": 2
+ },
+ "toolCallsTotal": 2,
+ "externalRemotes": null,
+ "vramMaxMiB": 25797,
+ "sandboxPath": "<home>/.local/share/trueforge/sandboxes/01m1t6bb1qsedxncjpp2s2zedg/01m1t6bb26zay4afc1rxmavtke",
+ "workspaceDiff": [
+  "A todo.html",
+  "M .gitkeep"
+ ],
+ "selfCheck": {
+  "served": true,
+  "fetched": true,
+  "both": true
+ },
+ "judge": {
+  "task": "T3",
+  "grade": "○",
+  "reason": "基本4要件は動作・編集/フィルタ/件数のうち1つ欠け",
+  "reqs": {
+   "add": true,
+   "toggle": true,
+   "delete": true,
+   "persist": true,
+   "edit": true,
+   "filter": false,
+   "count": true
+  },
+  "exists": true,
+  "htmlBytes": 6589,
+  "rowDetect": {
+   "rowTag": "LI",
+   "rowClass": "",
+   "parentTag": "UL"
+  },
+  "addedCount": 2,
+  "added": true,
+  "toggleFound": true,
+  "rowStateBefore": "active",
+  "rowStateAfter": "done",
+  "toggled": true,
+  "counterText": "未完了: 1 件",
+  "counterHasOne": true,
+  "editPersistedInLs": true,
+  "visOnActiveFilter": 2,
+  "visOnDoneFilter": 1,
+  "filterOK": false,
+  "countAfterReload": 3,
+  "persistedAfterReload": true,
+  "countAfterDelete": 2,
+  "deletedWorks": true,
+  "pageErrors": []
+ },
+ "finalResponse": "`project/todo.html` を作成し、要件（追加、完了切替、削除、編集、フィルタ、件数表示、localStorage保存）をすべて実装しました。\nPython の HTTP サーバーを起動して、ファイルが HTTP 200 で取得できることを確認し、サーバーを停止しました。"
+}
