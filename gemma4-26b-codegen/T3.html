@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地球・太陽・月 軌道シミュレーター</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #050505;
+            color: white;
+            font-family: sans-serif;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        canvas {
+            display: block;
+            cursor: crosshair;
+        }
+
+        .controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            user-select: none;
+        }
+
+        .control-group {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 5px;
+            color: #ccc;
+        }
+
+        button {
+            padding: 8px 15px;
+            cursor: pointer;
+            background: #444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #666;
+        }
+
+        select {
+            padding: 5px;
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="controls">
+    <div class="control-group">
+        <button id="pauseBtn">一時停止</button>
+    </div>
+    <div class="control-group">
+        <label for="speedSelect">速度調整</label>
+        <select id="speedSelect">
+            <option value="0.2">遅い</option>
+            <option value="1" selected>普通</option>
+            <option value="5">速い</option>
+        </select>
+    </div>
+</div>
+
+<canvas id="simCanvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('simCanvas');
+    const ctx = canvas.getContext('2d');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const speedSelect = document.getElementById('speedSelect');
+
+    // シミュレーション設定
+    let isPaused = false;
+    let speedMultiplier = 1;
+    let angleEarth = 0; // 地球の公転角
+    let angleMoon = 0;  // 月の公転角 (地球基準)
+
+    // 軌道・サイズの設定（見やすさ優先）
+    const sunRadius = 30;
+    const earthOrbitRadius = 200;
+    const earthRadius = 12;
+    const moonOrbitRadius = 45;
+    const moonRadius = 5;
+    const moonToEarthRatio = 12; // 地球1周の間に月が12回まわる
+
+    // 初期化
+    function init() {
+        resize();
+        window.addEventListener('resize', resize);
+        pauseBtn.addEventListener('click', togglePause);
+        speedSelect.addEventListener('change', (e) => {
+            speedMultiplier = parseFloat(e.target.value);
+        });
+        requestAnimationFrame(animate);
+    }
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+
+    function togglePause() {
+        isPaused = !isPaused;
+        pauseBtn.textContent = isPaused ? "再開" : "一時停止";
+    }
+
+    function drawCircle(x, y, radius, color, fill = false) {
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        if (fill) {
+            ctx.fillStyle = color;
+            ctx.fill();
+        } else {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+    }
+
+    function drawLabel(x, y, text, offset = 20) {
+        ctx.fillStyle = "white";
+        ctx.font = "14px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(text, x, y + offset);
+    }
+
+    function animate() {
+        // 背景クリア
+        ctx.fillStyle = '#050505';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+
+        if (!isPaused) {
+            // 角度の更新 (地球の公転速度を基準に、月は12倍速くする)
+            const baseSpeed = 0.005; 
+            angleEarth += baseSpeed * speedMultiplier;
+            angleMoon += (baseTriangleSpeed(baseSpeed)) * speedMultiplier;
+        }
+
+        // 補助関数: 月の回転速度計算用
+        function baseTriangleSpeed(base) { return base * moonToEarthRatio; }
+
+        // 1. 地球の軌道線を描画
+        drawCircle(centerX, centerY, earthOrbitRadius, 'rgba(255, 255, 255, 0.2)');
+
+        // 2. 太陽を描画
+        drawCircle(centerX, centerY, sunRadius, '#ffcc00', true);
+        drawLabel(centerX, centerY - sunRadius - 10, "太陽");
+
+        // 3. 地球の座標計算
+        const earthX = centerX + Math.cos(angleEarth) * earthOrbitRadius;
+        const earthY = centerY + Math.sin(angleEarth) * earthOrbitRadius;
+
+        // 4. 月の軌道線を描画 (地球を中心とした円)
+        drawCircle(earthX, earthY, moonOrbitRadius, 'rgba(255, 255, 255, 0.2)');
+
+        // 5. 地球を描画
+        drawCircle(earthX, earthY, earthRadius, '#2277ff', true);
+        drawLabel(earthX, earthY - earthRadius - 10, "地球");
+
+        // 6. 月の座標計算 (地球の座標 + 地球周りの回転)
+        const moonX = earthX + Math.cos(angleMoon) * moonOrbitRadius;
+        const moonY = earthY + Math.sin(angleMoon) * moonOrbitRadius;
+
+        // 7. 月を描画
+        drawCircle(moonX, moonY, moonRadius, '#aaaaaa', true);
+        drawLabel(moonX, moonY - moonRadius - 10, "月");
+
+        requestAnimationFrame(animate);
+    }
+
+    init();
+</script>
+
+</body>
+</html>

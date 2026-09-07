@@ -1,0 +1,115 @@
+{
+ "series": "agent-harness",
+ "slug": "nemotron-35-lightning-30b",
+ "model": "nemotron-3.5-lightning:30b",
+ "task": "t1",
+ "harness": "OpenClaw 2026.7.1-2 (0790d9f)",
+ "thinking": "off",
+ "timeoutSec": 900,
+ "forcedExit": false,
+ "agentDoneAt": "2026-08-31T03:30:23.148Z",
+ "sessionId": "fba624bf-f82d-48f6-a620-5c76c727eeee",
+ "startedAt": "2026-08-31T03:30:02.517Z",
+ "wallMs": 20835,
+ "exitCode": 0,
+ "timedOut": false,
+ "agentJsonPresent": true,
+ "durationMs_route1": 15563,
+ "stopReason_route1": "stop",
+ "toolSummary_route1": {
+  "calls": 8,
+  "tools": [
+   "exec",
+   "read",
+   "edit"
+  ],
+  "failures": 0
+ },
+ "skillsInjected_route1": 0,
+ "toolsSeen_route1": {
+  "listChars": 0,
+  "schemaChars": 3922,
+  "entries": [
+   {
+    "name": "read",
+    "summaryChars": 303,
+    "summaryHash": "b15dd29794ef5562ddee30a6282387ee7b40b9806c10ae2616daf75514ddc1f6",
+    "schemaChars": 304,
+    "schemaHash": "134f19bcabe3e29d63c5cebb38f1d2556759fd08adad6bc90a4b4d3cd1fb8441",
+    "propertiesCount": 3
+   },
+   {
+    "name": "edit",
+    "summaryChars": 326,
+    "summaryHash": "c498a85576e187d069e8e8ea4f70f81bddd57829600d385ef61c4359fd634c9e",
+    "schemaChars": 834,
+    "schemaHash": "457e8bb9f800b21be76c4fd8c0e3078bf07ee9bf93ac82f39944c171bd8f6d84",
+    "propertiesCount": 2
+   },
+   {
+    "name": "write",
+    "summaryChars": 127,
+    "summaryHash": "cdb1c46027b22d1f1b923b47bfe297821d9fe589a9f9d92994961948060a4d89",
+    "schemaChars": 225,
+    "schemaHash": "e98a2484f667cf7c22d76ca103bf2022bf9113dc63fe38b899e71c328cb1e833",
+    "propertiesCount": 2
+   },
+   {
+    "name": "apply_patch",
+    "summaryChars": 132,
+    "summaryHash": "432bf38688a4f011d2b765a441ac07e1fdfa9faf2051679adee04abcd9332d93",
+    "schemaChars": 153,
+    "schemaHash": "05521268363ff4f191472c90d69ef08a503ba9acf1d2febc50b3ee68db32ab65",
+    "propertiesCount": 1
+   },
+   {
+    "name": "exec",
+    "summaryChars": 698,
+    "summaryHash": "634e9bcae95f8bed10b22548a143df98ec8fd95ad9880893bbb579909a297c69",
+    "schemaChars": 1332,
+    "schemaHash": "49dcb29ee9f7016cd248f40cfb44508aac4d6a67d4c9acb52cbd08ad3e3ae893",
+    "propertiesCount": 12
+   },
+   {
+    "name": "process",
+    "summaryChars": 362,
+    "summaryHash": "21d78afb643a24f211fe9aa86c748f165ca82f1dc21bbaf6e3e6d6d4d4411d86",
+    "schemaChars": 1074,
+    "schemaHash": "a2d30a25569f409d7e8539844c89a088044535388b24031d014577b96ed27c5c",
+    "propertiesCount": 12
+   }
+  ]
+ },
+ "assistantMsgs_route2": 9,
+ "toolCounts_route2": {
+  "exec": 5,
+  "read": 2,
+  "edit": 1
+ },
+ "toolCallsTotal_route2": 8,
+ "loopSuspect": false,
+ "externalRemotes": [],
+ "vramMaxMiB": 27332,
+ "workspaceDiff": [
+  "M src/summary.js"
+ ],
+ "selfCheck": null,
+ "judge": {
+  "task": "T1",
+  "grade": "◎",
+  "reason": "全テスト通過・変更は src/summary.js の1ファイルのみ",
+  "passed": 7,
+  "failed": 0,
+  "total": 7,
+  "exitCode": 0,
+  "changed": [
+   "M src/summary.js"
+  ],
+  "testModified": false,
+  "evidence": {
+   "ranTests": true,
+   "identified": true,
+   "timedOut": false
+  }
+ }
+}

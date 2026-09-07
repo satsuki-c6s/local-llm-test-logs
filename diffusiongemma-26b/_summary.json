@@ -1,0 +1,38 @@
+{
+  "model": "diffusiongemma",
+  "runtime": "vllm 0.22.1rc1.dev357+g74b5964f0",
+  "baseUrl": "(公開用に伏せています)",
+  "ranAt": "2026-07-28T02:25:19.499Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "126.1",
+      "chars": 2060
+    },
+    {
+      "id": "A2",
+      "tokS": "413.7",
+      "chars": 183
+    },
+    {
+      "id": "B1",
+      "tokS": "496.8",
+      "chars": 877
+    },
+    {
+      "id": "B2",
+      "tokS": "494.3",
+      "chars": 182
+    },
+    {
+      "id": "C1",
+      "tokS": "704.5",
+      "chars": 2278
+    },
+    {
+      "id": "C2",
+      "tokS": "166.7",
+      "chars": 49
+    }
+  ]
+}

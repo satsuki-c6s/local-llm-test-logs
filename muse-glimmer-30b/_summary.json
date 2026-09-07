@@ -1,0 +1,51 @@
+{
+  "model": "muse-glimmer-30B",
+  "runtime": "llama.cpp (D:/ai/models/muse-glimmer/muse-glimmer-30B-kquant-17gb.gguf)",
+  "ftype": "Q4_K - Medium",
+  "baseUrl": "(公開用に伏せています)",
+  "ranAt": "2026-08-11T04:20:06.874Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "72.6",
+      "chars": 1699,
+      "reasoningChars": 3715,
+      "finishReason": "stop"
+    },
+    {
+      "id": "A2",
+      "tokS": "68.9",
+      "chars": 152,
+      "reasoningChars": 1223,
+      "finishReason": "stop"
+    },
+    {
+      "id": "B1",
+      "tokS": "67.9",
+      "chars": 188,
+      "reasoningChars": 1157,
+      "finishReason": "stop"
+    },
+    {
+      "id": "B2",
+      "tokS": "72.9",
+      "chars": 291,
+      "reasoningChars": 2120,
+      "finishReason": "stop"
+    },
+    {
+      "id": "C1",
+      "tokS": "72.6",
+      "chars": 2050,
+      "reasoningChars": 4809,
+      "finishReason": "stop"
+    },
+    {
+      "id": "C2",
+      "tokS": "73.6",
+      "chars": 50,
+      "reasoningChars": 5471,
+      "finishReason": "stop"
+    }
+  ]
+}

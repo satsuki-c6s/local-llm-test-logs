@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Earth-Sun-Moon Orbital Simulator</title>
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #000;
+  }
+  canvas {
+    border: 1px solid white;
+  }
+</style>
+</head>
+<body>
+<canvas id="orbitalCanvas" width="800" height="600"></canvas>
+<button onclick="togglePause()">一時停止/再開</button>
+<select onchange="changeSpeed(this.value)">
+  <option value="slow">遅い</option>
+  <option value="normal" selected>普通</option>
+  <option value="fast">速い</option>
+</select>
+
+<script>
+  const canvas = document.getElementById('orbitalCanvas');
+  const ctx = canvas.getContext('2d');
+
+  const sunRadius = 30;
+  const earthRadius = 15;
+  const moonRadius = 8;
+
+  let centerX = canvas.width / 2;
+  let centerY = canvas.height / 2;
+
+  let angleEarth = 0;
+  let angleMoon = 0;
+
+  let speed = 'normal';
+
+  function drawCircle(x, y, radius, color) {
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.closePath();
+  }
+
+  function drawOrbit(radius, color) {
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+    ctx.strokeStyle = color;
+    ctx.stroke();
+    ctx.closePath();
+  }
+
+  function update() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    drawOrbit(sunRadius + earthRadius, 'yellow');
+    drawOrbit(sunRadius + moonRadius, 'gray');
+
+    let earthX = centerX + (sunRadius + earthRadius) * Math.cos(angleEarth);
+    let earthY = centerY + (sunRadius + earthRadius) * Math.sin(angleEarth);
+
+    drawCircle(earthX, earthY, earthRadius, 'blue');
+
+    let moonX = earthX + (moonRadius) * Math.cos(angleMoon);
+    let moonY = earthY + (moonRadius) * Math.sin(angleMoon);
+
+    drawCircle(moonX, moonY, moonRadius, 'white');
+
+    ctx.font = '12px Arial';
+    ctx.fillStyle = 'white';
+    ctx.fillText('Sun', centerX - 5, centerY - sunRadius - 5);
+    ctx.fillText('Earth', earthX - earthRadius / 2, earthY + earthRadius / 2);
+    ctx.fillText('Moon', moonX - moonRadius / 2, moonY + moonRadius / 2);
+
+    angleEarth += (speed === 'slow' ? 0.01 : speed === 'fast' ? 0.03 : 0.02) * Math.PI;
+    angleMoon += (speed === 'slow' ? 0.04 : speed === 'fast' ? 0.12 : 0.08) * Math.PI;
+
+    requestAnimationFrame(update);
+  }
+
+  function togglePause() {
+    if (requestAnimationFrame.paused) {
+      requestAnimationFrame.resume();
+    } else {
+      requestAnimationFrame.pause();
+    }
+  }
+
+  function changeSpeed(value) {
+    speed = value;
+  }
+
+  update();
+</script>
+</body>
+</html>

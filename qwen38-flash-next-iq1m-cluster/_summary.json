@@ -1,0 +1,38 @@
+{
+  "model": "Qwen3.8-Flash-Next-UD-IQ1_M",
+  "runtime": "llama.cpp RPC (5 nodes)",
+  "baseUrl": "(公開用に伏せています)",
+  "ranAt": "2026-08-27T06:15:57.685Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "2.5",
+      "chars": 0
+    },
+    {
+      "id": "A2",
+      "tokS": "2.7",
+      "chars": 147
+    },
+    {
+      "id": "B1",
+      "tokS": "2.7",
+      "chars": 164
+    },
+    {
+      "id": "B2",
+      "tokS": "2.5",
+      "chars": 153
+    },
+    {
+      "id": "C1",
+      "tokS": "2.4",
+      "chars": 1391
+    },
+    {
+      "id": "C2",
+      "tokS": "2.5",
+      "chars": 0
+    }
+  ]
+}

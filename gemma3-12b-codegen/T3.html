@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Solar System Simulator</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    canvas { background-color: black; display: block; }
+    #controls { position: absolute; top: 10px; left: 10px; color: white; font-family: sans-serif; }
+  </style>
+</head>
+<body>
+
+<div id="controls">
+  速度: <select id="speedControl" onchange="updateSpeed()">
+    <option value="1">普通</option>
+    <option value="0.5">遅い</option>
+    <option value="2">速い</option>
+  </select>
+  <button id="pauseButton" onclick="togglePause()">一時停止/再開</button>
+</div>
+
+<canvas id="solarSystemCanvas"></canvas>
+
+<script>
+  const canvas = document.getElementById('solarSystemCanvas');
+  const ctx = canvas.getContext('2d');
+
+  let width = window.innerWidth;
+  let height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
+
+  // 天体のパラメータ
+  const sunRadius = 50;
+  const earthRadius = 20;
+  const moonRadius = 10;
+  const earthOrbitRadius = 150;
+  const moonOrbitRadius = 30;
+
+  let earthAngle = 0;
+  let moonAngle = 0;
+
+  // 速度制御
+  let speed = 1;
+  let paused = false;
+
+  // 速度設定
+  function updateSpeed() {
+    speed = parseFloat(document.getElementById('speedControl').value);
+  }
+
+  // 一時停止/再開
+  function togglePause() {
+    paused = !paused;
+  }
+
+
+  // 天体描画関数
+  function drawSun(x, y) {
+    ctx.beginPath();
+    ctx.arc(x, y, sunRadius, 0, Math.PI * 2);
+    ctx.fillStyle = 'yellow';
+    ctx.fill();
+    ctx.closePath();
+
+    ctx.font = "16px Arial";
+    ctx.fillText("Sun", x + sunRadius + 5, y - sunRadius - 10);
+  }
+
+  function drawEarth(x, y) {
+    ctx.beginPath();
+    ctx.arc(x, y, earthRadius, 0, Math.PI * 2);
+    ctx.fillStyle = 'blue';
+    ctx.fill();
+    ctx.closePath();
+
+    ctx.font = "16px Arial";
+    ctx.fillText("Earth", x + earthRadius + 5, y - earthRadius - 10);
+  }
+
+  function drawMoon(x, y) {
+    ctx.beginPath();
+    ctx.arc(x, y, moonRadius, 0, Math.PI * 2);
+    ctx.fillStyle = 'gray';
+    ctx.fill();
+    ctx.closePath();
+
+    ctx.font = "16px Arial";
+    ctx.fillText("Moon", x + moonRadius + 5, y - moonRadius - 10);
+  }
+
+
+  function drawOrbit(radius, color) {
+    ctx.beginPath();
+    ctx.arc(0, 0, radius, 0, Math.PI * 2);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.closePath();
+  }
+
+  // 初期化
+  function init() {
+    updateSpeed(); //初期速度設定
+  }
+
+
+  // アニメーションループ
+  function animate() {
+    if (!paused) {
+      // 地球の公転
+      earthAngle += speed * 0.1;
+
+      // 月の公転 (地球の公転周期に対して約12回公転する)
+      moonAngle += speed * 1.2;
+
+
+      ctx.clearRect(0, 0, width, height); // キャンバスをクリア
+
+      // 軌道描画
+      drawOrbit(earthOrbitRadius, 'white');
+      drawOrbit(moonOrbitRadius, 'white');
+
+      // 天体位置計算
+      const earthX = earthOrbitRadius * Math.cos(earthAngle);
+      const earthY = earthOrbitRadius * Math.sin(earthAngle);
+
+      const moonX = moonOrbitRadius * Math.cos(moonAngle);
+      const moonY = moonOrbitRadius * Math.sin(moonAngle);
+
+
+      // 天体描画
+      drawSun(0, 0);
+      drawEarth(earthX, earthY);
+      drawMoon(earthX + moonX, earthY + moonY);
+
+    }
+    requestAnimationFrame(animate);
+  }
+
+  init();
+  animate();
+
+
+  // リサイズ対応
+  window.addEventListener('resize', () => {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  });
+</script>
+
+</body>
+</html>

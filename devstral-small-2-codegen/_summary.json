@@ -1,0 +1,31 @@
+{
+  "series": "codegen (実アプリ3課題の一発生成)",
+  "model": "devstral-small-2 (Ollama, dense 24B Apache-2.0, RTX 5090 単機)",
+  "runAt": "2026-08-09",
+  "results": [
+    {
+      "id": "T1",
+      "label": "ToDoアプリ",
+      "seconds": 41,
+      "tokPerSec": 88,
+      "doneReason": "stop",
+      "htmlLines": 296
+    },
+    {
+      "id": "T2",
+      "label": "ブロック崩し",
+      "seconds": 26,
+      "tokPerSec": 88.7,
+      "doneReason": "stop",
+      "htmlLines": 257
+    },
+    {
+      "id": "T3",
+      "label": "軌道シミュレーター",
+      "seconds": 19,
+      "tokPerSec": 88.7,
+      "doneReason": "stop",
+      "htmlLines": 143
+    }
+  ]
+}

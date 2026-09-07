@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Breakout</title>
+    <style>
+        body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #000; }
+        canvas { border: 1px solid #fff; }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const ball = {
+            x: canvas.width / 2,
+            y: canvas.height - 50,
+            radius: 10,
+            dx: 2,
+            dy: -2
+        };
+
+        const paddle = {
+            x: canvas.width / 2 - 50,
+            y: canvas.height - 20,
+            width: 100,
+            height: 10
+        };
+
+        const blockRows = 5;
+        const blockCols = 8;
+        const blockWidth = 80;
+        const blockHeight = 20;
+        const blockPadding = 10;
+        const blockOffsetTop = 50;
+        const blockOffsetLeft = 50;
+
+        let blocks = [];
+        for (let r = 0; r < blockRows; r++) {
+            blocks[r] = [];
+            for (let c = 0; c < blockCols; c++) {
+                blocks[r][c] = {
+                    x: blockOffsetLeft + c * (blockWidth + blockPadding),
+                    y: blockOffsetTop + r * (blockHeight + blockPadding),
+                    width: blockWidth,
+                    height: blockHeight,
+                    alive: true
+                };
+            }
+        }
+
+        let score = 0;
+        let gameOver = false;
+        let gameCleared = false;
+        let keys = {};
+
+        document.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
+        });
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw ball
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#fff';
+            ctx.fill();
+            ctx.closePath();
+
+            // Draw paddle
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+
+            // Draw blocks
+            for (let r = 0; r < blockRows; r++) {
+                for (let c = 0; c < blockCols; c++) {
+                    const block = blocks[r][c];
+                    if (block.alive) {
+                        ctx.fillStyle = '#0f0';
+                        ctx.fillRect(block.x, block.y, block.width, block.height);
+                    }
+                }
+            }
+
+            // Draw score
+            ctx.fillStyle = '#fff';
+            ctx.font = '20px Arial';
+            ctx.fillText(`Score: ${score}`, 10, 30);
+
+            // Game over or cleared message
+            if (gameOver) {
+                ctx.fillStyle = '#f00';
+                ctx.font = '40px Arial';
+                ctx.fillText('Game Over', canvas.width / 2 - 100, canvas.height / 2);
+            } else if (gameCleared) {
+                ctx.fillStyle = '#0f0';
+                ctx.font = '40px Arial';
+                ctx.fillText('You Cleared!', canvas.width / 2 - 120, canvas.height / 2);
+            }
+        }
+
+        function update() {
+            if (gameOver || gameCleared) return;
+
+            // Move ball
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+
+            // Check wall collisions
+            if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+                ball.dx = -ball.dx;
+            }
+            if (ball.y - ball.radius < 0) {
+                ball.dy = -ball.dy;
+            }
+
+            // Check bottom collision (game over)
+            if (ball.y + ball.radius > canvas.height) {
+                gameOver = true;
+                return;
+            }
+
+            // Paddle collision
+            if (ball.y + ball.radius > paddle.y && 
+                ball.x > paddle.x && 
+                ball.x < paddle.x + paddle.width) {
+                ball.dy = -ball.dy;
+            }
+
+            // Block collisions
+            for (let r = 0; r < blockRows; r++) {
+                for (let c = 0; c < blockCols; c++) {
+                    const block = blocks[r][c];
+                    if (!block.alive) continue;
+
+                    if (ball.x + ball.radius > block.x && 
+                        ball.x - ball.radius < block.x + block.width && 
+                        ball.y + ball.radius > block.y && 
+                        ball.y - ball.radius < block.y + block.height) {
+                        block.alive = false;
+                        score += 10;
+
+                        // Check collision side
+                        if (ball.x - ball.radius < block.x || ball.x + ball.radius > block.x + block.width) {
+                            ball.dx = -ball.dx;
+                        } else {
+                            ball.dy = -ball.dy;
+                        }
+                    }
+                }
+            }
+
+            // Check if all blocks are cleared
+            let allCleared = true;
+            for (let r = 0; r < blockRows; r++) {
+                for (let c = 0; c < blockCols; c++) {
+                    if (blocks[r][c].alive) {
+                        allCleared = false;
+                        break;
+                    }
+                }
+                if (!allCleared) break;
+            }
+            if (allCleared) {
+                gameCleared = true;
+            }
+
+            // Move paddle based on keys
+            if (keys['ArrowLeft'] && paddle.x > 0) {
+                paddle.x -= 5;
+            }
+            if (keys['ArrowRight'] && paddle.x + paddle.width < canvas.width) {
+                paddle.x += 5;
+            }
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>

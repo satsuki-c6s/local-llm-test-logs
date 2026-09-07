@@ -1,0 +1,32 @@
+{
+  "series": "codegen (実アプリ3課題の一発生成)",
+  "model": "hf.co/TeichAI/Qwen3.8-27B-Fable-Distill-GGUF:Q4_K_M (Ollama 0.32.15, TeichAI による軽SFT・dense 27.8B Q4_K_M 17.4GB, RTX 5090 単機)",
+  "runAt": "2026-08-22",
+  "note": "Qwen3.8-27B-Fable-Distill は T2/T3 で 16,384 トークンの出力上限まで思考に消費され、HTMLブロックが閉じられないまま打ち切られた (T1 は length 到達だが HTML ブロックは閉じており完動)。ベースの第12弾 qwen3.8:27b は3課題とも stop で完走している。",
+  "results": [
+    {
+      "id": "T1",
+      "label": "ToDoアプリ",
+      "seconds": 225,
+      "tokPerSec": 74,
+      "doneReason": "length",
+      "htmlLines": 413
+    },
+    {
+      "id": "T2",
+      "label": "ブロック崩し",
+      "seconds": 220,
+      "tokPerSec": 73.8,
+      "doneReason": "length",
+      "htmlLines": 0
+    },
+    {
+      "id": "T3",
+      "label": "軌道シミュレーター",
+      "seconds": 219,
+      "tokPerSec": 73.9,
+      "doneReason": "length",
+      "htmlLines": 0
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>地球・太陽・月の軌道シミュレーター</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: #000;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    canvas {
+      display: block;
+    }
+    #controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 10;
+    }
+    button {
+      margin: 5px;
+      padding: 5px 10px;
+      background-color: #333;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #555;
+    }
+    #speed-control {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+    #speed-control label {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="orbitCanvas"></canvas>
+  <div id="controls">
+    <button id="pauseBtn">一時停止</button>
+    <div id="speed-control">
+      <label>速度:</label>
+      <button id="slowBtn">遅い</button>
+      <button id="normalBtn">普通</button>
+      <button id="fastBtn">速い</button>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('orbitCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // ウィンドウサイズに合わせてcanvasをリサイズ
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // 天体の定義
+    const sun = {
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      radius: 30,
+      color: '#FFD700',
+      name: '太陽'
+    };
+
+    const earth = {
+      x: 0,
+      y: 0,
+      radius: 15,
+      color: '#4169E1',
+      name: '地球',
+      orbitRadius: 150,
+      angle: 0,
+      speed: 0.01
+    };
+
+    const moon = {
+      x: 0,
+      y: 0,
+      radius: 7,
+      color: '#C0C0C0',
+      name: '月',
+      orbitRadius: 40,
+      angle: 0,
+      speed: 0.05
+    };
+
+    // シミュレーション状態
+    let isPaused = false;
+    let speedFactor = 1;
+
+    // ボタン操作
+    document.getElementById('pauseBtn').addEventListener('click', () => {
+      isPaused = !isPaused;
+      document.getElementById('pauseBtn').textContent = isPaused ? '再開' : '一時停止';
+    });
+
+    document.getElementById('slowBtn').addEventListener('click', () => { speedFactor = 0.5; });
+    document.getElementById('normalBtn').addEventListener('click', () => { speedFactor = 1; });
+    document.getElementById('fastBtn').addEventListener('click', () => { speedFactor = 2; });
+
+    // 軌道を描画する関数
+    function drawOrbit(orbitRadius, color) {
+      ctx.beginPath();
+      ctx.arc(sun.x, sun.y, orbitRadius, 0, Math.PI * 2);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // 天体を描画する関数
+    function drawCelestialBody(body) {
+      ctx.beginPath();
+      ctx.arc(body.x, body.y, body.radius, 0, Math.PI * 2);
+      ctx.fillStyle = body.color;
+      ctx.fill();
+      ctx.closePath();
+
+      // ラベルを描画
+      ctx.fillStyle = 'white';
+      ctx.font = '14px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(body.name, body.x, body.y - body.radius - 10);
+    }
+
+    // シミュレーションの更新
+    function update() {
+      if (isPaused) return;
+
+      earth.angle += earth.speed * speedFactor;
+      moon.angle += moon.speed * speedFactor;
+
+      // 地球の位置を計算
+      earth.x = sun.x + Math.cos(earth.angle) * earth.orbitRadius;
+      earth.y = sun.y + Math.sin(earth.angle) * earth.orbitRadius;
+
+      // 月の位置を計算（地球の周りと太陽の周り）
+      moon.x = earth.x + Math.cos(moon.angle) * moon.orbitRadius;
+      moon.y = earth.y + Math.sin(moon.angle) * moon.orbitRadius;
+    }
+
+    // 描画
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 軌道を描画
+      drawOrbit(earth.orbitRadius, '#4169E1');
+      drawOrbit(moon.orbitRadius, '#C0C0C0');
+
+      // 天体を描画
+      drawCelestialBody(sun);
+      drawCelestialBody(earth);
+      drawCelestialBody(moon);
+    }
+
+    // メインループ
+    function loop() {
+      update();
+      draw();
+      requestAnimationFrame(loop);
+    }
+
+    loop();
+  </script>
+</body>
+</html>

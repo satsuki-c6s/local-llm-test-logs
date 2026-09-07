@@ -1,0 +1,54 @@
+{
+ "series": "agent-harness",
+ "slug": "trueforge-gemma4-26b",
+ "model": "gemma4-26b-ctx64k",
+ "task": "t2",
+ "harness": "TrueForge 0.1.4 (@truefoundry/trueforge standalone・WSL2 Ubuntu・ローカルサンドボックス = sandbox-runtime + bwrap・ツールは exec のみ)",
+ "route": "custom provider ollama → http://127.0.0.1:11434/v1",
+ "timeoutSec": 900,
+ "sessionID": "01m1t65xghmwyvs09w2x71y0z2",
+ "turnID": "01m1t65xgzje9ejymy9cshh7ty.local",
+ "turnStatus": 200,
+ "turnState": "done",
+ "startedAt": "2026-09-06T01:43:57.716Z",
+ "wallMs": 27456,
+ "timedOut": false,
+ "assistantMsgs": 11,
+ "toolCounts": {
+  "exec": 10
+ },
+ "toolCallsTotal": 10,
+ "externalRemotes": null,
+ "vramMaxMiB": 25797,
+ "sandboxPath": "<home>/.local/share/trueforge/sandboxes/01m1t65xghmwyvs09w2x71y0z2/01m1t65xh1at07fwhddrrzhfmg",
+ "workspaceDiff": [
+  "A report.json"
+ ],
+ "selfCheck": null,
+ "judge": {
+  "task": "T2",
+  "grade": "◎",
+  "reason": "8欄すべて正解",
+  "exists": true,
+  "parsed": true,
+  "wrong": [],
+  "values": {
+   "project": "kumoribi-ledger",
+   "version": "2.7.3",
+   "port": 47311,
+   "database_file": "data/kumoribi.sqlite",
+   "entrypoint": "src/server.js",
+   "dependencies": [
+    "better-sqlite3",
+    "commander",
+    "yaml"
+   ],
+   "latest_release": {
+    "version": "2.7.3",
+    "date": "2026-07-19"
+   },
+   "todo_count": 4
+  }
+ },
+ "finalResponse": "project フォルダ内の各ファイルを解析し、指定されたスキーマに従って `project/report.json` を作成しました。\n`package.json` からプロジェクト名や依存関係を、`settings.yaml` からポート番号とDBパスを、`CHANGELOG.md` から最新リリース情報を、`src` 内のファイルから TODO の総数を抽出しました。\n\n```sandbox_artifacts\n[project/report.json](uploads/project/report.json)\n```"
+}

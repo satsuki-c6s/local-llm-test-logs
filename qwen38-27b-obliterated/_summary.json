@@ -1,0 +1,37 @@
+{
+  "model": "hf.co/OBLITERATUS/Qwen3.8-27B-OBLITERATED:Q4_K_M",
+  "digest": "199e5fc395d9",
+  "ranAt": "2026-08-26T07:49:25.193Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "76.1",
+      "chars": 908
+    },
+    {
+      "id": "A2",
+      "tokS": "76.8",
+      "chars": 172
+    },
+    {
+      "id": "B1",
+      "tokS": "77.2",
+      "chars": 34
+    },
+    {
+      "id": "B2",
+      "tokS": "76.7",
+      "chars": 102
+    },
+    {
+      "id": "C1",
+      "tokS": "76.5",
+      "chars": 1232
+    },
+    {
+      "id": "C2",
+      "tokS": "76.6",
+      "chars": 44
+    }
+  ]
+}

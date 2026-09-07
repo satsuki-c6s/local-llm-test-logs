@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ブロック崩し</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden; /* スクロールバーを非表示にする */
+      background-color: #eee;
+    }
+
+    canvas {
+      display: block;
+      background-color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="myCanvas" width="600" height="400"></canvas>
+
+  <script>
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // ゲーム設定
+    const paddleWidth = 10;
+    const paddleHeight = 80;
+    const ballSize = 10;
+    const blockWidth = 60;
+    const blockHeight = 20;
+    const blockRows = 5;
+    const blockCols = 10;
+    let score = 0;
+
+    // 初期値
+    let paddleX = canvas.width / 2 - paddleWidth / 2;
+    let ballX = canvas.width / 2 - ballSize / 2;
+    let ballY = canvas.height - 50;
+    let ballSpeedX = 3;
+    let ballSpeedY = -3;
+
+    // ブロックの作成
+    const blocks = [];
+    for (let row = 0; row < blockRows; row++) {
+      for (let col = 0; col < blockCols; col++) {
+        blocks.push({
+          x: col * blockWidth + 20,
+          y: row * blockHeight + 20,
+          width: blockWidth,
+          height: blockHeight,
+          alive: true
+        });
+      }
+    }
+
+    // ゲームオーバーフラグ
+    let gameOver = false;
+    let gameWon = false;
+
+
+    // パドルの描画
+    function drawPaddle() {
+      ctx.fillStyle = "#000";
+      ctx.fillRect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+    }
+
+    // ボールの描画
+    function drawBall() {
+      ctx.beginPath();
+      ctx.arc(ballX, ballY, ballSize, 0, Math.PI * 2);
+      ctx.fillStyle = "#000";
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    // ブロックの描画
+    function drawBlocks() {
+      for (let i = 0; i < blocks.length; i++) {
+        if (blocks[i].alive) {
+          ctx.fillStyle = "#333";
+          ctx.fillRect(blocks[i].x, blocks[i].y, blocks[i].width, blocks[i].height);
+        }
+      }
+    }
+
+    // スコア表示
+    function drawScore() {
+      ctx.font = "16px Arial";
+      ctx.fillStyle = "#000";
+      ctx.fillText("Score: " + score, 10, 20);
+    }
+
+    // ゲームオーバー表示
+    function drawGameOver() {
+      ctx.font = "30px Arial";
+      ctx.fillStyle = "red";
+      ctx.textAlign = "center";
+      ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
+    }
+
+    // クリア表示
+    function drawClear() {
+      ctx.font = "30px Arial";
+      ctx.fillStyle = "green";
+      ctx.textAlign = "center";
+      ctx.fillText("You Win!", canvas.width / 2, canvas.height / 2);
+    }
+
+    // ゲームの更新
+    function update() {
+      if (gameOver || gameWon) return; // ゲームオーバーまたはクリア時は更新しない
+
+      // ボールの移動
+      ballX += ballSpeedX;
+      ballY += ballSpeedY;
+
+      // 壁との衝突判定
+      if (ballX < 0 || ballX > canvas.width - ballSize) {
+        ballSpeedX = -ballSpeedX;
+      }
+      if (ballY < 0) {
+        ballSpeedY = -ballSpeedY;
+      }
+
+      // パドルとの衝突判定
+      if (ballY >= canvas.height - paddleHeight && ballX > paddleX && ballX < paddleX + paddleWidth) {
+        ballSpeedY = -ballSpeedY;
+      }
+
+      // ブロックとの衝突判定
+      for (let i = 0; i < blocks.length; i++) {
+        if (blocks[i].alive &&
+            ballX + ballSize > blocks[i].x &&
+            ballX < blocks[i].x + blocks[i].width &&
+            ballY + ballSize > blocks[i].y &&
+            ballY < blocks[i].y + blocks[i].height) {
+          blocks[i].alive = false;
+          score += 10;
+          ballSpeedY = -ballSpeedY; // 反転させる
+        }
+      }
+
+      // ゲームオーバー判定 (ボールが下端を超えた場合)
+      if (ballY > canvas.height) {
+        gameOver = true;
+      }
+
+      // クリア判定 (全てのブロックを消した場合)
+      if (blocks.every(block => !block.alive)) {
+        gameWon = true;
+      }
+    }
+
+
+    // ゲームの描画
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      drawPaddle();
+      drawBall();
+      drawBlocks();
+      drawScore();
+
+      if (gameOver) {
+        drawGameOver();
+      } else if (gameWon) {
+        drawClear();
+      }
+    }
+
+
+    // キーボード入力処理
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "ArrowLeft") {
+        paddleX = Math.max(0, paddleX - 5); // 左移動
+      } else if (event.key === "ArrowRight") {
+        paddleX = Math.min(canvas.width - paddleWidth, paddleX + 5); // 右移動
+      }
+    });
+
+    // ゲームループ
+    function gameLoop() {
+      update();
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
+
+    gameLoop();
+  </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{
+  "model": "escha-qwen38-27b-w2",
+  "runtime": "escha-sglang",
+  "baseUrl": "(公開用に伏せています)",
+  "ranAt": "2026-08-24T23:50:22.810Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "75.0",
+      "chars": 1744
+    },
+    {
+      "id": "A2",
+      "tokS": "57.9",
+      "chars": 161
+    },
+    {
+      "id": "B1",
+      "tokS": "82.9",
+      "chars": 893
+    },
+    {
+      "id": "B2",
+      "tokS": "81.2",
+      "chars": 309
+    },
+    {
+      "id": "C1",
+      "tokS": "83.3",
+      "chars": 1798
+    },
+    {
+      "id": "C2",
+      "tokS": "58.9",
+      "chars": 52
+    }
+  ]
+}

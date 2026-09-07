@@ -1,0 +1,37 @@
+{
+  "model": "hf.co/TeichAI/Qwen3.8-27B-Fable-Distill-GGUF:Q4_K_M",
+  "digest": "5c921af2fe5c",
+  "ranAt": "2026-08-22T05:33:04.378Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "75.5",
+      "chars": 1454
+    },
+    {
+      "id": "A2",
+      "tokS": "76.0",
+      "chars": 151
+    },
+    {
+      "id": "B1",
+      "tokS": "75.8",
+      "chars": 112
+    },
+    {
+      "id": "B2",
+      "tokS": "76.1",
+      "chars": 136
+    },
+    {
+      "id": "C1",
+      "tokS": "76.1",
+      "chars": 2430
+    },
+    {
+      "id": "C2",
+      "tokS": "75.1",
+      "chars": 37
+    }
+  ]
+}

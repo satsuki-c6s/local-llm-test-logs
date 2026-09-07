@@ -1,0 +1,80 @@
+{
+ "series": "agent-harness",
+ "slug": "granite-42-30b-llamacpp",
+ "model": "granite",
+ "task": "t3",
+ "harness": "OpenClaw 2026.7.1-2 (0790d9f)",
+ "thinking": "off",
+ "timeoutSec": 900,
+ "forcedExit": false,
+ "agentDoneAt": null,
+ "sessionId": "b268424d-da96-4a77-9df7-be54fd760b5f",
+ "startedAt": "2026-08-31T04:32:21.498Z",
+ "wallMs": 72970,
+ "exitCode": 4294967295,
+ "timedOut": false,
+ "agentJsonPresent": false,
+ "durationMs_route1": null,
+ "stopReason_route1": null,
+ "toolSummary_route1": null,
+ "skillsInjected_route1": null,
+ "toolsSeen_route1": null,
+ "assistantMsgs_route2": 34,
+ "toolCounts_route2": {
+  "exec": 31,
+  "write": 2,
+  "process": 1
+ },
+ "toolCallsTotal_route2": 34,
+ "loopSuspect": false,
+ "externalRemotes": [],
+ "vramMaxMiB": 32025,
+ "workspaceDiff": [
+  "A server.js",
+  "A todo.html",
+  "D .gitkeep"
+ ],
+ "selfCheck": {
+  "served": true,
+  "fetched": false,
+  "both": false
+ },
+ "judge": {
+  "task": "T3",
+  "grade": "○",
+  "reason": "基本4要件は動作・編集/フィルタ/件数のうち1つ欠け",
+  "reqs": {
+   "add": true,
+   "toggle": true,
+   "delete": true,
+   "persist": true,
+   "edit": false,
+   "filter": true,
+   "count": true
+  },
+  "exists": true,
+  "htmlBytes": 14642,
+  "rowDetect": {
+   "rowTag": "LI",
+   "rowClass": "task-item ",
+   "parentTag": "UL"
+  },
+  "addedCount": 2,
+  "added": true,
+  "toggleFound": true,
+  "rowStateBefore": "active",
+  "rowStateAfter": "done",
+  "toggled": true,
+  "counterText": "未完了のタスク: 1",
+  "counterHasOne": true,
+  "editPersistedInLs": false,
+  "visOnActiveFilter": 1,
+  "visOnDoneFilter": 1,
+  "filterOK": true,
+  "countAfterReload": 2,
+  "persistedAfterReload": true,
+  "countAfterDelete": 1,
+  "deletedWorks": true,
+  "pageErrors": []
+ }
+}

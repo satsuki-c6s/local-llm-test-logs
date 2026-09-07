@@ -1,0 +1,65 @@
+{
+  "model": "Qwen3.6-35B-A3B-FP8",
+  "runtime": "llamacpp",
+  "ftype": "?",
+  "baseUrl": "(公開用に伏せています)",
+  "thinking": "off",
+  "maxTokens": 4096,
+  "ranAt": "2026-09-05T11:32:49.867Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "165.1",
+      "chars": 3908,
+      "reasoningChars": 0,
+      "finishReason": "stop",
+      "completionTokens": 1418,
+      "thinkTagLeak": false
+    },
+    {
+      "id": "A2",
+      "tokS": "39.4",
+      "chars": 133,
+      "reasoningChars": 0,
+      "finishReason": "stop",
+      "completionTokens": 65,
+      "thinkTagLeak": false
+    },
+    {
+      "id": "B1",
+      "tokS": "168.4",
+      "chars": 1151,
+      "reasoningChars": 0,
+      "finishReason": "stop",
+      "completionTokens": 617,
+      "thinkTagLeak": false
+    },
+    {
+      "id": "B2",
+      "tokS": "182.6",
+      "chars": 1430,
+      "reasoningChars": 0,
+      "finishReason": "stop",
+      "completionTokens": 982,
+      "thinkTagLeak": false
+    },
+    {
+      "id": "C1",
+      "tokS": "174.1",
+      "chars": 2110,
+      "reasoningChars": 0,
+      "finishReason": "stop",
+      "completionTokens": 812,
+      "thinkTagLeak": false
+    },
+    {
+      "id": "C2",
+      "tokS": "45.9",
+      "chars": 75,
+      "reasoningChars": 0,
+      "finishReason": "stop",
+      "completionTokens": 42,
+      "thinkTagLeak": false
+    }
+  ]
+}
