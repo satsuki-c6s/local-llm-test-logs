@@ -1,0 +1,37 @@
+{
+  "model": "qwen38-27b-gsq-rco-iq3xxs",
+  "digest": "bfc8ed176534",
+  "ranAt": "2026-09-01T05:36:04.911Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "100.0",
+      "chars": 2642
+    },
+    {
+      "id": "A2",
+      "tokS": "100.4",
+      "chars": 172
+    },
+    {
+      "id": "B1",
+      "tokS": "99.5",
+      "chars": 554
+    },
+    {
+      "id": "B2",
+      "tokS": "100.6",
+      "chars": 220
+    },
+    {
+      "id": "C1",
+      "tokS": "99.8",
+      "chars": 4738
+    },
+    {
+      "id": "C2",
+      "tokS": "93.3",
+      "chars": 45
+    }
+  ]
+}

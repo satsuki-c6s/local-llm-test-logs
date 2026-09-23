@@ -1,0 +1,83 @@
+{
+ "series": "agent-harness",
+ "slug": "qwythos-9b",
+ "model": "qwythos-9b:Q4_K_M",
+ "task": "t3",
+ "harness": "OpenClaw 2026.7.1-2 (0790d9f)",
+ "thinking": "off",
+ "timeoutSec": 900,
+ "forcedExit": false,
+ "agentDoneAt": null,
+ "sessionId": "79b853b7-e01c-46f2-9755-7b9ab8e8d80c",
+ "startedAt": "2026-08-29T08:38:35.097Z",
+ "wallMs": 369300,
+ "exitCode": 1,
+ "timedOut": false,
+ "agentJsonPresent": false,
+ "durationMs_route1": null,
+ "stopReason_route1": null,
+ "toolSummary_route1": null,
+ "skillsInjected_route1": null,
+ "toolsSeen_route1": null,
+ "assistantMsgs_route2": 14,
+ "toolCounts_route2": {
+  "exec": 13
+ },
+ "toolCallsTotal_route2": 13,
+ "loopSuspect": false,
+ "externalRemotes": [
+  "172.64.155.209"
+ ],
+ "vramMaxMiB": 10473,
+ "workspaceDiff": [
+  "A response.txt",
+  "A todo.html",
+  "D .gitkeep"
+ ],
+ "selfCheck": {
+  "served": true,
+  "fetched": true,
+  "both": true
+ },
+ "judge": {
+  "task": "T3",
+  "grade": "×",
+  "reason": "追加すら不能 (または起動せず)",
+  "reqs": {
+   "add": false,
+   "toggle": false,
+   "delete": false,
+   "persist": false,
+   "edit": false,
+   "filter": false,
+   "count": false
+  },
+  "exists": true,
+  "htmlBytes": 3420,
+  "rowDetect": null,
+  "addedCount": 0,
+  "added": false,
+  "toggleFound": false,
+  "rowStateBefore": "none",
+  "rowStateAfter": "none",
+  "toggled": false,
+  "counterText": null,
+  "counterHasOne": false,
+  "editPersistedInLs": false,
+  "visOnActiveFilter": 0,
+  "visOnDoneFilter": 0,
+  "filterOK": false,
+  "countAfterReload": 0,
+  "persistedAfterReload": false,
+  "deletedWorks": false,
+  "countAfterDelete": null,
+  "pageErrors": [
+   "Identifier 'filter' has already been declared",
+   "Identifier 'filter' has already been declared",
+   "filter is not a function",
+   "filter is not a function",
+   "filter is not a function",
+   "Identifier 'filter' has already been declared"
+  ]
+ }
+}

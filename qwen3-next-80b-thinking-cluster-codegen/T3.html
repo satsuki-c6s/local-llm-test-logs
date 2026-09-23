@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Earth-Sun-Moon Simulator</title>
+    <style>
+        body { margin: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; background: #000; }
+        canvas { background: #000; }
+        .controls { position: absolute; top: 10px; display: flex; gap: 10px; }
+        button { padding: 5px 10px; background: #333; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #555; }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button id="pauseButton">Pause</button>
+        <button id="slowButton">Slow</button>
+        <button id="normalButton">Normal</button>
+        <button id="fastButton">Fast</button>
+    </div>
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+        
+        const sunX = width / 2;
+        const sunY = height / 2;
+        const earthOrbitRadius = 150;
+        const moonOrbitRadius = 30;
+        
+        let earthAngle = 0;
+        let moonAngle = 0;
+        let earthSpeed = 0.01;
+        let moonSpeed = 12 * earthSpeed;
+        let earthX, earthY, moonX, moonY;
+        let earthTrail = [];
+        let moonTrail = [];
+        let isPaused = false;
+        const speedFactors = { slow: 0.5, normal: 1.0, fast: 2.0 };
+        let currentSpeedFactor = speedFactors.normal;
+        
+        function update() {
+            if (isPaused) return;
+            
+            earthAngle += earthSpeed * currentSpeedFactor;
+            moonAngle += moonSpeed * currentSpeedFactor;
+            
+            earthX = sunX + Math.cos(earthAngle) * earthOrbitRadius;
+            earthY = sunY + Math.sin(earthAngle) * earthOrbitRadius;
+            
+            moonX = earthX + Math.cos(moonAngle) * moonOrbitRadius;
+            moonY = earthY + Math.sin(moonAngle) * moonOrbitRadius;
+            
+            earthTrail.push({ x: earthX, y: earthY });
+            moonTrail.push({ x: moonX, y: moonY });
+            
+            if (earthTrail.length > 100) earthTrail.shift();
+            if (moonTrail.length > 100) moonTrail.shift();
+        }
+        
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Draw Earth's trail
+            ctx.beginPath();
+            ctx.strokeStyle = 'blue';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < earthTrail.length; i++) {
+                const point = earthTrail[i];
+                if (i === 0) ctx.moveTo(point.x, point.y);
+                else ctx.lineTo(point.x, point.y);
+            }
+            ctx.stroke();
+            
+            // Draw Moon's trail
+            ctx.beginPath();
+            ctx.strokeStyle = 'gray';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < moonTrail.length; i++) {
+                const point = moonTrail[i];
+                if (i === 0) ctx.moveTo(point.x, point.y);
+                else ctx.lineTo(point.x, point.y);
+            }
+            ctx.stroke();
+            
+            // Draw Sun
+            ctx.beginPath();
+            ctx.arc(sunX, sunY, 20, 0, Math.PI * 2);
+            ctx.fillStyle = 'yellow';
+            ctx.fill();
+            ctx.strokeStyle = 'black';
+            ctx.stroke();
+            
+            // Draw Earth
+            ctx.beginPath();
+            ctx.arc(earthX, earthY, 10, 0, Math.PI * 2);
+            ctx.fillStyle = 'blue';
+            ctx.fill();
+            ctx.strokeStyle = 'black';
+            ctx.stroke();
+            
+            // Draw Moon
+            ctx.beginPath();
+            ctx.arc(moonX, moonY, 5, 0, Math.PI * 2);
+            ctx.fillStyle = 'gray';
+            ctx.fill();
+            ctx.strokeStyle = 'black';
+            ctx.stroke();
+            
+            // Draw labels
+            ctx.fillStyle = 'white';
+            ctx.font = '12px Arial';
+            ctx.fillText('Sun', sunX + 25, sunY);
+            ctx.fillText('Earth', earthX + 15, earthY);
+            ctx.fillText('Moon', moonX + 10, moonY);
+        }
+        
+        function animate() {
+            update();
+            draw();
+            requestAnimationFrame(animate);
+        }
+        
+        document.getElementById('pauseButton').addEventListener('click', () => {
+            isPaused = !isPaused;
+            document.getElementById('pauseButton').textContent = isPaused ? 'Resume' : 'Pause';
+        });
+        
+        document.getElementById('slowButton').addEventListener('click', () => {
+            currentSpeedFactor = speedFactors.slow;
+        });
+        
+        document.getElementById('normalButton').addEventListener('click', () => {
+            currentSpeedFactor = speedFactors.normal;
+        });
+        
+        document.getElementById('fastButton').addEventListener('click', () => {
+            currentSpeedFactor = speedFactors.fast;
+        });
+        
+        animate();
+    </script>
+</body>
+</html>

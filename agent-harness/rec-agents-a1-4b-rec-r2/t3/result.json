@@ -1,0 +1,77 @@
+{
+ "series": "agent-harness",
+ "slug": "rec-agents-a1-4b-rec-r2",
+ "model": "agents-a1-4b:Q4_K_M",
+ "task": "t3",
+ "harness": "OpenClaw 2026.7.1-2 (0790d9f)",
+ "thinking": "off",
+ "samplingParams": {
+  "temperature": 0.85,
+  "top_k": 20,
+  "top_p": 0.95,
+  "repeat_penalty": 1,
+  "presence_penalty": 1.1,
+  "min_p": 0
+ },
+ "timeoutSec": 900,
+ "runnerKilledByModel": true,
+ "note": "モデルが exec で `Get-Process -Name node | Stop-Process -Force` を実行し OpenClaw とランナーごと終了。ランナーは result.json を書けなかったため、2026-09-15 20:10 に runDir の session.jsonl と成果物から手で再構成 (判定器は同じ judge-t3.mts を成果物に直接実行)。第4弾 BTL-4 T3 の先例に合わせモデルの結果として数える。第1ルート (--json) なし",
+ "startedAt": "2026-09-15T11:03:53.747Z",
+ "wallMs": 95516,
+ "wallNote": "session.jsonl の最初〜最後のイベント時刻 (spawn〜exit ではない)",
+ "exitCode": null,
+ "timedOut": false,
+ "agentJsonPresent": false,
+ "durationMs_route1": null,
+ "stopReason_route1": null,
+ "toolSummary_route1": null,
+ "assistantMsgs_route2": 68,
+ "toolCounts_route2": {
+  "exec": 57,
+  "write": 4,
+  "process": 7
+ },
+ "toolCallsTotal_route2": 68,
+ "externalRemotes": [],
+ "vramMaxMiB": 8342,
+ "judge": {
+  "task": "T3",
+  "grade": "○",
+  "reason": "基本4要件は動作・編集/フィルタ/件数のうち1つ欠け",
+  "reqs": {
+   "add": true,
+   "toggle": true,
+   "delete": true,
+   "persist": true,
+   "edit": false,
+   "filter": true,
+   "count": true
+  },
+  "exists": true,
+  "htmlBytes": 9193,
+  "rowDetect": {
+   "rowTag": "LI",
+   "rowClass": "task-item",
+   "parentTag": "UL"
+  },
+  "addedCount": 2,
+  "added": true,
+  "toggleFound": true,
+  "rowStateBefore": "active",
+  "rowStateAfter": "done",
+  "toggled": true,
+  "counterText": "1件の未完了タスク",
+  "counterHasOne": true,
+  "editPersistedInLs": false,
+  "visOnActiveFilter": 1,
+  "visOnDoneFilter": 1,
+  "filterOK": true,
+  "countAfterReload": 2,
+  "persistedAfterReload": true,
+  "countAfterDelete": 1,
+  "deletedWorks": true,
+  "pageErrors": [
+   "Cannot read properties of undefined (reading 'length')"
+  ]
+ }
+}

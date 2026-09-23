@@ -1,0 +1,37 @@
+{
+  "model": "nex-n25-mini:latest",
+  "digest": "54dbf61fb3fd",
+  "ranAt": "2026-09-12T01:46:33.133Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "228.6",
+      "chars": 2319
+    },
+    {
+      "id": "A2",
+      "tokS": "225.7",
+      "chars": 138
+    },
+    {
+      "id": "B1",
+      "tokS": "230.0",
+      "chars": 121
+    },
+    {
+      "id": "B2",
+      "tokS": "234.5",
+      "chars": 164
+    },
+    {
+      "id": "C1",
+      "tokS": "231.9",
+      "chars": 4381
+    },
+    {
+      "id": "C2",
+      "tokS": "193.5",
+      "chars": 33
+    }
+  ]
+}

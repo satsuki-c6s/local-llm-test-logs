@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>地球・太陽・月 軌道シミュレーター</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #050510;
+            color: white;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        canvas {
+            background-color: #000;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            cursor: crosshair;
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+        }
+        button {
+            padding: 8px 16px;
+            cursor: pointer;
+            background: #444;
+            color: white;
+            border: 1px solid #666;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #666;
+        }
+        select {
+            padding: 8px;
+            background: #444;
+            color: white;
+            border: 1px solid #666;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .label {
+            font-size: 14px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="simCanvas"></canvas>
+
+    <div class="controls">
+        <button id="pauseBtn">一時停止</button>
+        <div>
+            <span class="label">速度:</span>
+            <select id="speedSelect">
+                <option value="0.5">遅い</option>
+                <option value="1" selected>普通</option>
+                <option value="3">速い</option>
+            </select>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const speedSelect = document.getElementById('speedSelect');
+
+        // 設定値（見やすさ優先のスケール）
+        const SETTINGS = {
+            sunRadius: 15,
+            earthRadius: 7,
+            moonRadius: 3,
+            earthOrbitRadius: 200,
+            moonOrbitRadius: 40,
+            earthSpeed: 0.01, // 地球の公転速度
+            moonRatio: 12.37  // 地球1周に対し月の公転回数 (約12回)
+        };
+
+        let state = {
+            earthAngle: 0,
+            moonAngle: 0,
+            isPaused: false,
+            speedMultiplier: 1,
+            width: 0,
+            height: 0
+        };
+
+        // キャンバスサイズ調整
+        function resize() {
+            state.width = window.innerWidth * 0.8;
+            state.height = window.innerHeight * 0.7;
+            canvas.width = state.width;
+            canvas.height = state.height;
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        // 操作イベント
+        pauseBtn.addEventListener('click', () => {
+            state.isPaused = !state.isPaused;
+            pauseBtn.textContent = state.isPaused ? '再開' : '一時停止';
+        });
+
+        speedSelect.addEventListener('change', (e) => {
+            state.speedMultiplier = parseFloat(e.target.value);
+        });
+
+        function drawCircle(x, y, radius, color, fill = true) {
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            if (fill) {
+                ctx.fillStyle = color;
+                ctx.fill();
+            } else {
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            }
+            ctx.closePath();
+        }
+
+        function drawText(text, x, y, color) {
+            ctx.fillStyle = color;
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(text, x, y - 10);
+        }
+
+        function update() {
+            if (!state.isPaused) {
+                // 地球の角度を更新
+                state.earthAngle += SETTINGS.earthSpeed * state.speedMultiplier;
+                // 月の角度を更新 (地球の速度 × 比率)
+                state.moonAngle += (SETTINGS.earthSpeed * SETTINGS.moonRatio) * state.speedMultiplier;
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, state.width, state.height);
+
+            const centerX = state.width / 2;
+            const centerY = state.height / 2;
+
+            // --- 1. 軌道線の描画 ---
+            // 地球の軌道
+            drawCircle(centerX, centerY, SETTINGS.earthOrbitRadius, 'rgba(255, 255, 255, 0.2)', false);
+            
+            // 月の軌道（地球の位置に合わせて動的に計算）
+            const earthX = centerX + Math.cos(state.earthAngle) * SETTINGS.earthOrbitRadius;
+            const earthY = centerY + Math.sin(state.earthAngle) * SETTINGS.earthOrbitRadius;
+            drawCircle(earthX, earthY, SETTINGS.moonOrbitRadius, 'rgba(255, 255, 255, 0.3)', false);
+
+            // --- 2. 天体の描画 ---
+            // 太陽
+            drawCircle(centerX, centerY, SETTINGS.sunRadius, '#ffcc00');
+            drawText('太陽 (Sun)', centerX, centerY + 25, '#ffcc00');
+
+            // 地球
+            drawCircle(earthX, earthY, SETTINGS.earthRadius, '#4488ff');
+            drawText('地球 (Earth)', earthX, earthY + 15, '#4488ff');
+
+            // 月
+            const moonX = earthX + Math.cos(state.moonAngle) * SETTINGS.moonOrbitRadius;
+            const moonY = earthY + Math.sin(state.moonAngle) * SETTINGS.moonOrbitRadius;
+            drawCircle(moonX, moonY, SETTINGS.moonRadius, '#cccccc');
+            drawText('月 (Moon)', moonX, moonY + 10, '#cccccc');
+
+            // 背景の星を適当に描画（静的）
+            ctx.fillStyle = 'white';
+            for(let i=0; i<50; i++) {
+                const x = (Math.sin(i * 123.4) * 0.5 + 0.5) * state.width;
+                const y = (Math.cos(i * 567.8) * 0.5 + 0.5) * state.height;
+                ctx.fillRect(x, y, 1, 1);
+            }
+        }
+
+        function loop() {
+            update();
+            draw();
+            requestAnimationFrame(loop);
+        }
+
+        loop();
+    </script>
+</body>
+</html>

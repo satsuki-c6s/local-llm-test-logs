@@ -1,0 +1,65 @@
+{
+  "model": "flashnext-iq3xxs",
+  "runtime": "llama.cpp (<models>/Qwen3.8-Flash-Next-UD-IQ3_XXS-00001-of-00003.gguf)",
+  "ftype": "IQ3_XXS - 3.0625 bpw",
+  "baseUrl": "(公開用に伏せています)",
+  "thinking": "off",
+  "maxTokens": 4096,
+  "ranAt": "2026-09-04T16:11:29.669Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "12.3",
+      "chars": 1439,
+      "reasoningChars": 0,
+      "finishReason": "stop",
+      "completionTokens": 416,
+      "thinkTagLeak": false
+    },
+    {
+      "id": "A2",
+      "tokS": "5.6",
+      "chars": 164,
+      "reasoningChars": 0,
+      "finishReason": "stop",
+      "completionTokens": 89,
+      "thinkTagLeak": false
+    },
+    {
+      "id": "B1",
+      "tokS": "21.7",
+      "chars": 950,
+      "reasoningChars": 0,
+      "finishReason": "stop",
+      "completionTokens": 487,
+      "thinkTagLeak": false
+    },
+    {
+      "id": "B2",
+      "tokS": "21.3",
+      "chars": 450,
+      "reasoningChars": 0,
+      "finishReason": "stop",
+      "completionTokens": 320,
+      "thinkTagLeak": false
+    },
+    {
+      "id": "C1",
+      "tokS": "28.9",
+      "chars": 3902,
+      "reasoningChars": 0,
+      "finishReason": "stop",
+      "completionTokens": 1241,
+      "thinkTagLeak": false
+    },
+    {
+      "id": "C2",
+      "tokS": "14.5",
+      "chars": 46,
+      "reasoningChars": 0,
+      "finishReason": "stop",
+      "completionTokens": 29,
+      "thinkTagLeak": false
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "model": "hf.co/mmnga/sarashina2.2-3b-instruct-v0.1-gguf:Q4_K_M",
+  "digest": "4f06c3a02d13",
+  "ranAt": "2026-07-27T16:56:13.606Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "112.5",
+      "chars": 1230
+    },
+    {
+      "id": "A2",
+      "tokS": "138.7",
+      "chars": 176
+    },
+    {
+      "id": "B1",
+      "tokS": "146.0",
+      "chars": 230
+    },
+    {
+      "id": "B2",
+      "tokS": "143.0",
+      "chars": 213
+    },
+    {
+      "id": "C1",
+      "tokS": "98.9",
+      "chars": 2277
+    },
+    {
+      "id": "C2",
+      "tokS": "145.4",
+      "chars": 139
+    }
+  ]
+}

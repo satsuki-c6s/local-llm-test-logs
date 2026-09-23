@@ -1,0 +1,42 @@
+{
+  "model": "DeepSeek-R1-Distill-Llama-70B-UD-Q4_K_XL (mesh-llm 4台クラスタ)",
+  "runAt": "2026-08-06",
+  "results": [
+    {
+      "id": "A1",
+      "seconds": 174,
+      "finishReason": "stop",
+      "contentChars": 2016
+    },
+    {
+      "id": "A2",
+      "seconds": 552,
+      "finishReason": "stop",
+      "contentChars": 130
+    },
+    {
+      "id": "B1",
+      "seconds": 756,
+      "finishReason": "stop",
+      "contentChars": 206
+    },
+    {
+      "id": "B2",
+      "seconds": 1881,
+      "finishReason": "stop",
+      "contentChars": 229
+    },
+    {
+      "id": "C1",
+      "seconds": 1353,
+      "finishReason": "stop",
+      "contentChars": 1583
+    },
+    {
+      "id": "C2",
+      "seconds": 363,
+      "finishReason": "stop",
+      "contentChars": 76
+    }
+  ]
+}

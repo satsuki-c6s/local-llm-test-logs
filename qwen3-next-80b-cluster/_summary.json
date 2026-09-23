@@ -1,0 +1,42 @@
+{
+  "model": "Qwen3-Next-80B-A3B-Instruct-UD-Q4_K_XL (mesh-llm クラスタ・3台参加)",
+  "runAt": "2026-08-07",
+  "results": [
+    {
+      "id": "A1",
+      "seconds": 22,
+      "finishReason": "stop",
+      "contentChars": 2500
+    },
+    {
+      "id": "A2",
+      "seconds": 2,
+      "finishReason": "stop",
+      "contentChars": 124
+    },
+    {
+      "id": "B1",
+      "seconds": 5,
+      "finishReason": "stop",
+      "contentChars": 379
+    },
+    {
+      "id": "B2",
+      "seconds": 25,
+      "finishReason": "stop",
+      "contentChars": 1463
+    },
+    {
+      "id": "C1",
+      "seconds": 23,
+      "finishReason": "stop",
+      "contentChars": 2196
+    },
+    {
+      "id": "C2",
+      "seconds": 2,
+      "finishReason": "stop",
+      "contentChars": 67
+    }
+  ]
+}

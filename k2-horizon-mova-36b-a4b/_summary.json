@@ -1,0 +1,61 @@
+{
+  "model": "K2-Horizon-MoVA-36B-A4B-Q4_K_M",
+  "runtime": "llama.cpp (<models>/K2-Horizon-MoVA-36B-A4B-Q4_K_M.gguf)",
+  "ftype": "Q4_K - Medium",
+  "baseUrl": "(公開用に伏せています)",
+  "condition": "frozen",
+  "options": {
+    "temperature": 0.2,
+    "top_p": 0.9,
+    "seed": 42,
+    "max_tokens": 4096
+  },
+  "chatTemplateKwargs": {
+    "enable_thinking": false
+  },
+  "ranAt": "2026-09-07T03:12:15.437Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "132.5",
+      "chars": 2849,
+      "reasoningChars": 0,
+      "finishReason": "stop"
+    },
+    {
+      "id": "A2",
+      "tokS": "90.3",
+      "chars": 191,
+      "reasoningChars": 0,
+      "finishReason": "stop"
+    },
+    {
+      "id": "B1",
+      "tokS": "104.7",
+      "chars": 316,
+      "reasoningChars": 0,
+      "finishReason": "stop"
+    },
+    {
+      "id": "B2",
+      "tokS": "127.4",
+      "chars": 471,
+      "reasoningChars": 0,
+      "finishReason": "stop"
+    },
+    {
+      "id": "C1",
+      "tokS": "135.6",
+      "chars": 2421,
+      "reasoningChars": 0,
+      "finishReason": "stop"
+    },
+    {
+      "id": "C2",
+      "tokS": "72.0",
+      "chars": 129,
+      "reasoningChars": 0,
+      "finishReason": "stop"
+    }
+  ]
+}

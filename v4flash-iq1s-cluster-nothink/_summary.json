@@ -1,0 +1,38 @@
+{
+  "model": "DeepSeek-V4-Flash-0731-UD-IQ1_S",
+  "runtime": "llama.cpp RPC (5 nodes)",
+  "baseUrl": "(公開用に伏せています)",
+  "ranAt": "2026-08-27T06:54:23.844Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "5.2",
+      "chars": 2676
+    },
+    {
+      "id": "A2",
+      "tokS": "6.5",
+      "chars": 156
+    },
+    {
+      "id": "B1",
+      "tokS": "6.9",
+      "chars": 305
+    },
+    {
+      "id": "B2",
+      "tokS": "6.9",
+      "chars": 495
+    },
+    {
+      "id": "C1",
+      "tokS": "5.6",
+      "chars": 3042
+    },
+    {
+      "id": "C2",
+      "tokS": "6.4",
+      "chars": 52
+    }
+  ]
+}

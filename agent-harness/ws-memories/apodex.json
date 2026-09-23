@@ -1,0 +1,79 @@
+{
+  "model": "apodex-1.1-mini:latest",
+  "sessions": [
+    "docs/agent-harness-results/ws-apodex-r1/t1/session.jsonl",
+    "docs/agent-harness-results/ws-apodex-r1/t2/session.jsonl",
+    "docs/agent-harness-results/ws-apodex-r1/t3/session.jsonl"
+  ],
+  "generatedAt": "2026-08-31T22:40:28.623Z",
+  "wikiAttempts": 2,
+  "skillAttempts": 1,
+  "patternsRaw": [
+    {
+      "name": "powershell-command-chaining-with-semicolon",
+      "observation": "In all three trajectories, the agent's first `exec` call failed with a `ParserError` because it used bash-style `&&` to chain commands (e.g., `cd path && ls`) in a PowerShell shell. The agent only succeeded after switching to `;` as the command separator and quoting paths containing spaces. This is a shell-semantics mismatch, not a problem with the commands themselves.",
+      "guidance": "When the shell is PowerShell, always use `;` to chain commands instead of `&&`, and wrap paths with spaces in quotes. If a command fails with a parser error mentioning `&&` or `;`, check the shell semantics before investigating further.\n\n---"
+    },
+    {
+      "name": "local-http-verification-with-node",
+      "observation": "In trajectory 3, attempts to verify an HTML file over HTTP failed: `python -m http.server` was unavailable/immature and `curl` did not work reliably in PowerShell. The agent ultimately succeeded by starting a local server with Node.js's built-in `http` module via `node -e` and checking the response with `Invoke-WebRequest` (HTTP 200 confirmed), then killing the process.",
+      "guidance": "For local HTTP verification on Windows, prefer Node.js built-in modules to spin up a server and `Invoke-WebRequest -UseBasicParsing` to check responses. Ensure the server process stays alive during the verification step and terminate it afterward."
+    }
+  ],
+  "patterns": [
+    {
+      "name": "powershell-command-chaining-with-semicolon",
+      "observation": "In all three trajectories, the agent's first `exec` call failed with a `ParserError` because it used bash-style `&&` to chain commands (e.g., `cd path && ls`) in a PowerShell shell. The agent only succeeded after switching to `;` as the command separator and quoting paths containing spaces. This is a shell-semantics mismatch, not a problem with the commands themselves.",
+      "guidance": "When the shell is PowerShell, always use `;` to chain commands instead of `&&`, and wrap paths with spaces in quotes. If a command fails with a parser error mentioning `&&` or `;`, check the shell semantics before investigating further.\n\n---"
+    },
+    {
+      "name": "local-http-verification-with-node",
+      "observation": "In trajectory 3, attempts to verify an HTML file over HTTP failed: `python -m http.server` was unavailable/immature and `curl` did not work reliably in PowerShell. The agent ultimately succeeded by starting a local server with Node.js's built-in `http` module via `node -e` and checking the response with `Invoke-WebRequest` (HTTP 200 confirmed), then killing the process.",
+      "guidance": "For local HTTP verification on Windows, prefer Node.js built-in modules to spin up a server and `Invoke-WebRequest -UseBasicParsing` to check responses. Ensure the server process stays alive during the verification step and terminate it afterward."
+    }
+  ],
+  "patternsExcluded": [],
+  "skillsRaw": [
+    {
+      "name": "powershell-semicolon-command-chaining",
+      "description": "Use when chaining multiple commands in an `exec` call for the PowerShell shell; do not use bash-style `&&`.",
+      "instructions": "1. Replace all `&&` command-chain operators with `;` as the separator in multi-command `exec` calls.\n2. If execution fails with a `ParserError` mentioning `&&` or `;`, confirm the shell separator syntax before investigating the command's logic.\n3. Re-run the corrected command and verify no parser error appears.",
+      "applicability": "Applies to every multi-command `exec` call in the PowerShell shell on Windows."
+    },
+    {
+      "name": "powershell-quote-spaced-paths",
+      "description": "Use whenever a `exec` command references a file or directory path that contains spaces.",
+      "instructions": "1. Identify every path argument in the command (working directory, source/output file paths, script paths).\n2. Enclose each path containing spaces in double quotes.\n3. Re-run the command and confirm the path resolves without error.",
+      "applicability": "Applies to all `exec` commands on Windows that pass paths with spaces to PowerShell."
+    },
+    {
+      "name": "local-http-verification-nodejs",
+      "description": "Use when you must serve a local file over HTTP on Windows and confirm it returns HTTP 200.",
+      "instructions": "1. Start a local server using Node.js's built-in `http` module via a one-off `node -e` invocation, serving from the workspace directory.\n2. Wait briefly for the server to start, then verify the file with `(Invoke-WebRequest -Uri <http_url> -UseBasicParsing).StatusCode`.\n3. Confirm the status code equals 200, then terminate the server process (by PID or session) to clean up.",
+      "applicability": "Applies to local HTTP verification tasks on Windows where `python -m http.server` or `curl` are unavailable or unreliable."
+    }
+  ],
+  "skills": [
+    {
+      "name": "powershell-semicolon-command-chaining",
+      "description": "Use when chaining multiple commands in an `exec` call for the PowerShell shell; do not use bash-style `&&`.",
+      "instructions": "1. Replace all `&&` command-chain operators with `;` as the separator in multi-command `exec` calls.\n2. If execution fails with a `ParserError` mentioning `&&` or `;`, confirm the shell separator syntax before investigating the command's logic.\n3. Re-run the corrected command and verify no parser error appears.",
+      "applicability": "Applies to every multi-command `exec` call in the PowerShell shell on Windows."
+    },
+    {
+      "name": "powershell-quote-spaced-paths",
+      "description": "Use whenever a `exec` command references a file or directory path that contains spaces.",
+      "instructions": "1. Identify every path argument in the command (working directory, source/output file paths, script paths).\n2. Enclose each path containing spaces in double quotes.\n3. Re-run the command and confirm the path resolves without error.",
+      "applicability": "Applies to all `exec` commands on Windows that pass paths with spaces to PowerShell."
+    },
+    {
+      "name": "local-http-verification-nodejs",
+      "description": "Use when you must serve a local file over HTTP on Windows and confirm it returns HTTP 200.",
+      "instructions": "1. Start a local server using Node.js's built-in `http` module via a one-off `node -e` invocation, serving from the workspace directory.\n2. Wait briefly for the server to start, then verify the file with `(Invoke-WebRequest -Uri <http_url> -UseBasicParsing).StatusCode`.\n3. Confirm the status code equals 200, then terminate the server process (by PID or session) to clean up.",
+      "applicability": "Applies to local HTTP verification tasks on Windows where `python -m http.server` or `curl` are unavailable or unreliable."
+    }
+  ],
+  "skillsExcluded": [],
+  "wikiRawOutput": "# Pattern 1\n## Name\npowershell-command-chaining-with-semicolon\n\n## Observation\nIn all three trajectories, the agent's first `exec` call failed with a `ParserError` because it used bash-style `&&` to chain commands (e.g., `cd path && ls`) in a PowerShell shell. The agent only succeeded after switching to `;` as the command separator and quoting paths containing spaces. This is a shell-semantics mismatch, not a problem with the commands themselves.\n\n## Guidance\nWhen the shell is PowerShell, always use `;` to chain commands instead of `&&`, and wrap paths with spaces in quotes. If a command fails with a parser error mentioning `&&` or `;`, check the shell semantics before investigating further.\n\n---\n\n# Pattern 2\n## Name\nlocal-http-verification-with-node\n\n## Observation\nIn trajectory 3, attempts to verify an HTML file over HTTP failed: `python -m http.server` was unavailable/immature and `curl` did not work reliably in PowerShell. The agent ultimately succeeded by starting a local server with Node.js's built-in `http` module via `node -e` and checking the response with `Invoke-WebRequest` (HTTP 200 confirmed), then killing the process.\n\n## Guidance\nFor local HTTP verification on Windows, prefer Node.js built-in modules to spin up a server and `Invoke-WebRequest -UseBasicParsing` to check responses. Ensure the server process stays alive during the verification step and terminate it afterward.",
+  "skillRawOutput": "# Skill 1\n## Name\npowershell-semicolon-command-chaining\n## Description\nUse when chaining multiple commands in an `exec` call for the PowerShell shell; do not use bash-style `&&`.\n## Instructions\n1. Replace all `&&` command-chain operators with `;` as the separator in multi-command `exec` calls.\n2. If execution fails with a `ParserError` mentioning `&&` or `;`, confirm the shell separator syntax before investigating the command's logic.\n3. Re-run the corrected command and verify no parser error appears.\n## Applicability\nApplies to every multi-command `exec` call in the PowerShell shell on Windows.\n\n# Skill 2\n## Name\npowershell-quote-spaced-paths\n## Description\nUse whenever a `exec` command references a file or directory path that contains spaces.\n## Instructions\n1. Identify every path argument in the command (working directory, source/output file paths, script paths).\n2. Enclose each path containing spaces in double quotes.\n3. Re-run the command and confirm the path resolves without error.\n## Applicability\nApplies to all `exec` commands on Windows that pass paths with spaces to PowerShell.\n\n# Skill 3\n## Name\nlocal-http-verification-nodejs\n## Description\nUse when you must serve a local file over HTTP on Windows and confirm it returns HTTP 200.\n## Instructions\n1. Start a local server using Node.js's built-in `http` module via a one-off `node -e` invocation, serving from the workspace directory.\n2. Wait briefly for the server to start, then verify the file with `(Invoke-WebRequest -Uri <http_url> -UseBasicParsing).StatusCode`.\n3. Confirm the status code equals 200, then terminate the server process (by PID or session) to clean up.\n## Applicability\nApplies to local HTTP verification tasks on Windows where `python -m http.server` or `curl` are unavailable or unreliable."
+}

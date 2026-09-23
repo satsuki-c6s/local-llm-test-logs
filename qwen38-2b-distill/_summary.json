@@ -1,0 +1,37 @@
+{
+  "model": "hf.co/empero-ai/Qwen3.8-2B-Distill-GGUF:Q4_K_M",
+  "digest": "98e87c255611",
+  "ranAt": "2026-08-23T08:10:07.661Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "437.9",
+      "chars": 6108
+    },
+    {
+      "id": "A2",
+      "tokS": "447.4",
+      "chars": 222
+    },
+    {
+      "id": "B1",
+      "tokS": "449.4",
+      "chars": 330
+    },
+    {
+      "id": "B2",
+      "tokS": "397.0",
+      "chars": 363
+    },
+    {
+      "id": "C1",
+      "tokS": "427.9",
+      "chars": 10244
+    },
+    {
+      "id": "C2",
+      "tokS": "330.2",
+      "chars": 53
+    }
+  ]
+}

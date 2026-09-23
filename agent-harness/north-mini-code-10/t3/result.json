@@ -1,0 +1,54 @@
+{
+ "series": "agent-harness",
+ "slug": "north-mini-code-10",
+ "model": "north-mini-code-1.0:Q4_K_M",
+ "task": "t3",
+ "harness": "OpenClaw 2026.7.1-2 (0790d9f)",
+ "thinking": "off",
+ "timeoutSec": 900,
+ "forcedExit": false,
+ "agentDoneAt": null,
+ "sessionId": "7e4b9502-b353-44a8-897d-04ca8353e125",
+ "startedAt": "2026-08-29T07:04:42.184Z",
+ "wallMs": 9037,
+ "exitCode": 1,
+ "timedOut": false,
+ "agentJsonPresent": false,
+ "durationMs_route1": null,
+ "stopReason_route1": null,
+ "toolSummary_route1": null,
+ "skillsInjected_route1": null,
+ "toolsSeen_route1": null,
+ "assistantMsgs_route2": 2,
+ "toolCounts_route2": {
+  "read": 1
+ },
+ "toolCallsTotal_route2": 1,
+ "loopSuspect": false,
+ "externalRemotes": [],
+ "vramMaxMiB": 26313,
+ "workspaceDiff": [
+  "D .gitkeep"
+ ],
+ "selfCheck": {
+  "served": false,
+  "fetched": false,
+  "both": false
+ },
+ "judge": {
+  "task": "T3",
+  "grade": "×",
+  "reason": "todo.html が無い",
+  "reqs": {
+   "add": false,
+   "toggle": false,
+   "delete": false,
+   "persist": false,
+   "edit": false,
+   "filter": false,
+   "count": false
+  },
+  "exists": false,
+  "added": false
+ }
+}

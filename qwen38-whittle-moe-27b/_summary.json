@@ -1,0 +1,37 @@
+{
+  "model": "qwen38-whittle-moe-27b",
+  "digest": "44d7b48ebc08",
+  "ranAt": "2026-09-01T06:11:42.042Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "88.9",
+      "chars": 1737
+    },
+    {
+      "id": "A2",
+      "tokS": "88.8",
+      "chars": 385
+    },
+    {
+      "id": "B1",
+      "tokS": "88.4",
+      "chars": 6213
+    },
+    {
+      "id": "B2",
+      "tokS": "87.3",
+      "chars": 4127
+    },
+    {
+      "id": "C1",
+      "tokS": "87.3",
+      "chars": 10097
+    },
+    {
+      "id": "C2",
+      "tokS": "81.8",
+      "chars": 44
+    }
+  ]
+}

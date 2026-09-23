@@ -1,0 +1,37 @@
+{
+  "model": "hf.co/unsloth/GLM-4.7-Flash-GGUF:Q4_K_M",
+  "digest": "ae19295826a5",
+  "ranAt": "2026-07-27T17:29:59.130Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "195.6",
+      "chars": 13035
+    },
+    {
+      "id": "A2",
+      "tokS": "201.5",
+      "chars": 199
+    },
+    {
+      "id": "B1",
+      "tokS": "195.6",
+      "chars": 6982
+    },
+    {
+      "id": "B2",
+      "tokS": "208.6",
+      "chars": 602
+    },
+    {
+      "id": "C1",
+      "tokS": "195.5",
+      "chars": 10678
+    },
+    {
+      "id": "C2",
+      "tokS": "190.2",
+      "chars": 52
+    }
+  ]
+}

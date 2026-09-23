@@ -1,0 +1,80 @@
+{
+ "series": "agent-harness",
+ "slug": "btl-4",
+ "model": "btl-4:Q4_K_M",
+ "task": "t3",
+ "harness": "OpenClaw 2026.7.1-2 (0790d9f)",
+ "thinking": "off",
+ "timeoutSec": 900,
+ "forcedExit": false,
+ "agentDoneAt": null,
+ "sessionId": "9875d826-3c7e-401a-9fae-0604d5a9655b",
+ "startedAt": "2026-08-29T00:53:13.216Z",
+ "wallMs": 35686,
+ "exitCode": 4294967295,
+ "timedOut": false,
+ "agentJsonPresent": false,
+ "durationMs_route1": null,
+ "stopReason_route1": null,
+ "toolSummary_route1": null,
+ "skillsInjected_route1": null,
+ "toolsSeen_route1": null,
+ "assistantMsgs_route2": 12,
+ "toolCounts_route2": {
+  "exec": 9,
+  "write": 2,
+  "process": 1
+ },
+ "toolCallsTotal_route2": 12,
+ "loopSuspect": false,
+ "externalRemotes": [],
+ "vramMaxMiB": 24594,
+ "workspaceDiff": [
+  "A server.js",
+  "A todo.html",
+  "D .gitkeep"
+ ],
+ "selfCheck": {
+  "served": true,
+  "fetched": true,
+  "both": true
+ },
+ "judge": {
+  "task": "T3",
+  "grade": "◎",
+  "reason": "7要件すべて動作",
+  "reqs": {
+   "add": true,
+   "toggle": true,
+   "delete": true,
+   "persist": true,
+   "edit": true,
+   "filter": true,
+   "count": true
+  },
+  "exists": true,
+  "htmlBytes": 6699,
+  "rowDetect": {
+   "rowTag": "LI",
+   "rowClass": "todo-item",
+   "parentTag": "UL"
+  },
+  "addedCount": 2,
+  "added": true,
+  "toggleFound": true,
+  "rowStateBefore": "active",
+  "rowStateAfter": "done",
+  "toggled": true,
+  "counterText": "未完了タスク: 1 件",
+  "counterHasOne": true,
+  "editPersistedInLs": true,
+  "visOnActiveFilter": 1,
+  "visOnDoneFilter": 1,
+  "filterOK": true,
+  "countAfterReload": 2,
+  "persistedAfterReload": true,
+  "countAfterDelete": 1,
+  "deletedWorks": true,
+  "pageErrors": []
+ }
+}

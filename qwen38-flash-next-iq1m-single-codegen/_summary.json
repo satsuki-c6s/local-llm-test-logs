@@ -1,0 +1,41 @@
+{
+  "series": "codegen (実アプリ3課題の一発生成)",
+  "model": "llama.cpp llama-server (PR ブランチ jkyamog/pr/flash-next-qsa-rotkv abdc7a0 = #27742+#27774 相当・Windows ネイティブ CUDA 13.1) / モデル unsloth/Qwen3.8-Flash-Next-GGUF UD-IQ1_M (74.5GB・48層) / RTX 5090 32GB + RAM 64GB 単機",
+  "condition": "temperature 0.2 / top_p 0.9 / seed 42 / max_tokens 16384 / n_ctx 24576 / システムプロンプトなし / 思考はモデル既定 (reasoning_effort 既定 xhigh) / 一発勝負・修正なし【①凍結条件】",
+  "runAt": "2026-08-27",
+  "results": [
+    {
+      "id": "T1",
+      "label": "ToDoアプリ",
+      "seconds": 653,
+      "tokPerSec": 25.32,
+      "doneReason": "length",
+      "completionTokens": 16384,
+      "contentChars": 0,
+      "thinkingChars": 68829,
+      "htmlLines": 0
+    },
+    {
+      "id": "T2",
+      "label": "ブロック崩し",
+      "seconds": 657,
+      "tokPerSec": 25.13,
+      "doneReason": "length",
+      "completionTokens": 16384,
+      "contentChars": 3802,
+      "thinkingChars": 45865,
+      "htmlLines": 0
+    },
+    {
+      "id": "T3",
+      "label": "軌道シミュレーター",
+      "seconds": 658,
+      "tokPerSec": 25.02,
+      "doneReason": "length",
+      "completionTokens": 16384,
+      "contentChars": 0,
+      "thinkingChars": 52533,
+      "htmlLines": 0
+    }
+  ]
+}

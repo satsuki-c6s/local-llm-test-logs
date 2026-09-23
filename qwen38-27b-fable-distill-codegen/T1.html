@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ToDo — 今日やること</title>
+<style>
+  :root{
+    --bg:#12161d;
+    --panel:#1a2029;
+    --panel-2:#212936;
+    --line:#2f3947;
+    --text:#ece9e1;
+    --muted:#8b95a7;
+    --accent:#e8482f;
+    --accent-soft:rgba(232,72,47,.16);
+    --gold:#e6b455;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ color-scheme:dark; }
+  body{
+    min-height:100vh;
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Yu Gothic",system-ui,sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(900px 480px at 88% -12%, rgba(232,72,47,.12), transparent 62%),
+      radial-gradient(760px 520px at -12% 112%, rgba(230,180,85,.09), transparent 60%),
+      var(--bg);
+    display:flex; justify-content:center;
+    padding:48px 18px 64px;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1.4px);
+    background-size:26px 26px;
+    -webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 28%, #000 30%, transparent 78%);
+    mask-image:radial-gradient(ellipse 90% 70% at 50% 28%, #000 30%, transparent 78%);
+  }
+  ::selection{ background:rgba(232,72,47,.45); }
+  :focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+
+  .app{
+    position:relative; z-index:1; width:100%; max-width:600px;
+    background:var(--panel); border:1px solid var(--line); border-radius:16px;
+    padding:26px 26px 20px;
+    box-shadow:0 24px 60px rgba(0,0,0,.45), inset 0 2px 0 rgba(255,255,255,.03);
+  }
+
+  /* ---------- ヘッダー ---------- */
+  header{ display:flex; align-items:center; gap:14px; margin-bottom:22px; }
+  .seal{
+    width:48px; height:48px; flex:none; display:grid; place-items:center;
+    background:linear-gradient(160deg,#f05a3c,#d63a24); color:#fff;
+    font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP","MS PMincho",serif;
+    font-size:27px; font-weight:700; border-radius:11px;
+    box-shadow:0 8px 20px rgba(232,72,47,.35);
+    transform:rotate(-4deg); transition:transform .25s ease;
+  }
+  .seal:hover{ transform:rotate(3deg) scale(1.06); }
+  h1{
+    font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP","MS PMincho",serif;
+    font-size:26px; font-weight:700; letter-spacing:.06em;
+  }
+  .sub{ color:var(--muted); font-size:12.5px; margin-top:2px; letter-spacing:.14em; }
+  .badge{
+    margin-left:auto; flex:none; font-size:13px; color:var(--gold); white-space:nowrap;
+    border:1px solid rgba(230,180,85,.4); background:rgba(230,180,85,.08);
+    padding:6px 12px; border-radius:999px;
+  }
+  .badge b{ font-size:15px; }
+
+  /* ---------- 追加フォーム ---------- */
+  .add-row{ display:flex; gap:10px; }
+  .add-row input{
+    flex:1; min-width:0; padding:13px 15px; font-size:15px; color:var(--text);
+    background:var(--panel-2); border:1px solid var(--line); border-radius:11px;
+    outline:none; transition:border-color .2s, box-shadow .2s;
+  }
+  .add-row input::placeholder{ color:#6b7484; }
+  .add-row input:focus{ border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+  .add-row input.shake{ animation:shake .35s ease; border-color:var(--accent); }
+  @keyframes shake{ 20%,60%{ transform:translateX(-6px);} 40%,80%{ transform:translateX(6px);} }
+  .add-btn{
+    flex:none; padding:0 20px; font-size:15px; font-weight:700; cursor:pointer;
+    color:#fff; background:linear-gradient(160deg,#f05a3c,#d63a24);
+    border:none; border-radius:11px; letter-spacing:.08em;
+    box-shadow:0 6px 16px rgba(232,72,47,.3);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .add-btn:hover{ transform:translateY(-2px); box-shadow:0 10px 22px rgba(232,72,47,.42); }
+  .add-btn:active{ transform:translateY(0); }
+  .hint{ margin-top:8px; font-size:11.5px; color:#667082; letter-spacing:.05em; }
+
+  /* ---------- フィルタ ---------- */
+  .filters{
+    position:relative; display:flex; margin:20px 0 16px; padding:4px;
+    background:var(--panel-2); border:1px solid var(--line); border-radius:11px;
+  }
+  .filters button{
+    position:relative; z-index:1; flex:1; padding:8px 0; font-size:13.5px; cursor:pointer;
+    background:none; border:none; color:var(--muted); font-weight:600; letter-spacing:.06em;
+    transition:color .2s;
+  }
+  .filters button:hover{ color:var(--text); }
+  .filters button.active{ color:#fff; }
+  .ind{
+    position:absolute; top:4px; bottom:4px; left:0; width:0; z-index:0;
+    background:linear-gradient(160deg,#3a4557,#2c3543); border:1px solid #46536a;
+    border-radius:8px;
+    transition:left .28s cubic-bezier(.5,1.4,.5,1), width .28s cubic-bezier(.5,1.4,.5,1);
+  }
+
+  /* ---------- タスクリスト ---------- */
+  #list{ list-style:none; display:flex; flex-direction:column; gap:8px; min-height:40px; }
+  .task{
+    display:flex; align-items:center; gap:12px; padding:12px 14px;
+    background:var(--panel-2); border:1px solid var(--line); border-radius:11px;
+    animation:pop-in .3s ease backwards;
+    transition:border-color .2s, background .2s;
+  }
+  .task:hover{ border-color:#3d4a5e; background:#242e3d; }
+  @keyframes pop-in{ from{ opacity:0; transform:translateY(-8px) scale(.985);} }
+
+  .check{
+    appearance:none; -webkit-appearance:none;
+    width:22px; height:22px; flex:none; position:relative; cursor:pointer;
+    border:2px solid #4a5568; border-radius:7px; background:transparent;
+    transition:background .2s, border-color .2s, transform .15s;
+  }
+  .check:hover{ border-color:var(--gold); transform:scale(1.08); }
+  .check::after{
+    content:""; position:absolute; left:6px; top:2px; width:6px; height:11px;
+    border:solid #fff; border-width:0 2.5px 2.5px 0;
+    transform:rotate(45deg) scale(0); transition:transform .18s ease .05s;
+  }
+  .check:checked{ background:var(--accent); border-color:var(--accent); }
+  .check:checked::after{ transform:rotate(45deg) scale(1); }
+
+  .text{
+    flex:1; min-width:0; font-size:15px; line-height:1.5; word-break:break-word;
+    user-select:none; cursor:default;
+    background-image:linear-gradient(var(--muted),var(--muted));
+    background-repeat:no-repeat; background-size:0% 1.5px; background-position:0 58%;
+    transition:background-size .3s ease, color .3s ease;
+  }
+  .task.done .text{ background-size:100% 1.5px; color:var(--muted); }
+
+  .del{
+    flex:none; width:30px; height:30px; display:grid; place-items:center;
+    background:none; border:none; border-radius:8px; cursor:pointer;
+    color:#667082; font-size:15px; line-height:1; opacity:.55;
+    transition:opacity .15s, background .15s, color .15s, transform .15s;
+  }
+  .task:hover .del{ opacity:1; }
+  .del:hover{ background:var(--accent-soft); color:var(--accent); transform:scale(1.12); }
+  @media (hover:none){ .del{ opacity:.8; } }
+
+  .edit-input{
+    flex:1; min-width:0; padding:6px 9px; font-size:15px; color:var(--text);
+    background:var(--panel); border:1px solid var(--accent); border-radius:8px; outline:none;
+    box-shadow:0 0 0 3px var(--accent-soft);
+  }
+
+  /* ---------- 空状態 ---------- */
+  .empty{ display:none; text-align:center; padding:34px 10px; color:var(--muted); font-size:14px; }
+  .empty.show{ display:block; animation:pop-in .3s ease; }
+  .empty .kanji{
+    display:block; margin-bottom:10px; font-size:34px; color:#3d4a5e;
+    font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP","MS PMincho",serif;
+  }
+
+  /* ---------- フッター ---------- */
+  footer{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    margin-top:18px; padding-top:14px; border-top:1px solid var(--line);
+  }
+  #remaining{ font-size:13px; color:var(--muted); }
+  #remaining b{ color:var(--gold); }
+  .clear{
+    background:none; border:none; cursor:pointer; color:var(--muted);
+    font-size:12.5px; padding:6px 10px; border-radius:8px;
+    transition:color .15s, background .15s;
+  }
+  .clear:hover:not(:disabled){ color:var(--accent); background:var(--accent-soft); }
+  .clear:disabled{ opacity:.35; cursor:default; }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{ animation:none!important; transition:none!important; }
+  }
+</style>
+</head>
+<body>
+<main class="app">
+  <header>
+    <div class="seal" aria-hidden="true">做</div>
+    <div>
+      <h1>ToDo</h1>
+      <p class="sub">今日やることリスト</p>
+    </div>
+    <span class="badge" id="badge" aria-live="polite">未完了 <b>0</b> 件</span>
+  </header>
+
+  <form id="addForm" class="add-row" autocomplete="off">
+    <input id="addInput" type="text" placeholder="やることを入力…" maxlength="200" aria-label="新しいタスク" />
+    <button class="add-btn" type="submit">追加</button>
+  </form>
+  <p class="hint">Enter で追加 ・ タスクをダブルクリックすると編集できます</p>
+
+  <nav class="filters" aria-label="タスクのフィルタ">
+    <span class="ind" aria-hidden="true"></span>
+    <button type="button" data-filter="all" class="active">すべて</button>
+    <button type="button" data-filter="active">未完了</button>
+    <button type="button" data-filter="done">完了</button>
+  </nav>
+
+  <ul id="list"></ul>
+
+  <div class="empty" id="empty">
+    <span class="kanji" id="emptyKanji">空</span>
+    <p id="emptyMsg"></p>
+  </div>
+
+  <footer>
+    <span id="remaining" aria-live="polite">未完了 <b>0</b> 件</span>
+    <button class="clear" id="clearDone" type="button" disabled>完了したタスクを消去</button>
+  </footer>
+</main>
+
+<script>
+(function(){
+  const TASKS_KEY = 'todo.tasks.v1';
+  const FILTER_KEY = 'todo.filter.v1';
+  const $ = s => document.querySelector(s);
+
+  const list = $('#list'), empty = $('#empty'),
+        emptyKanji = $('#emptyKanji'), emptyMsg = $('#emptyMsg'),
+        badge = $('#badge'), remaining = $('#remaining'), clearBtn = $('#clearDone'),
+        form = $('#addForm'), addInput = $('#addInput'),
+        filters = $('.filters'), ind = $('.ind'),
+        filterBtns = [...filters.querySelectorAll('button')];
+
+  let tasks = load();
+  let filter = localStorage.getItem(FILTER_KEY) || 'all';
+
+  function load(){
+    try{
+      const raw = JSON.parse(localStorage.getItem(TASKS_KEY));
+      return Array.isArray(raw) ? raw.filter(t => t && typeof t.text === 'string') : [];
+    }catch(e){ return []; }
+  }
+  function save(){ localStorage.setItem(TASKS_KEY, JSON.stringify(tasks)); }
+
+  function visible(){
+    return tasks.filter(t => filter === 'all' ? true : filter === 'active' ? !t.done : t.done);
+  }
+
+  function render(){
+    list.innerHTML = '';
+    visible().forEach((t, i) => {
+      const li = makeItem(t);
+      li.style.animationDelay = Math.min(i * 40, 320) + 'ms';
+      list.appendChild(li);
+    });
+    updateMeta();
+  }
+
+  function makeItem(t){
+    const li = document.createElement('li');
+    li.className = 'task' + (t.done ? ' done' : '');
+    li.dataset.id = t.id;
+
+    const cb = document.createElement('input');
+    cb.type = 'checkbox'; cb.className = 'check'; cb.checked = t.done;
+    cb.setAttribute('aria-label', 'タスクを完了にする');
+    cb.addEventListener('change', () => {
+      t.done = cb.checked; save();
+      li.classList.toggle('done', t.done);
+      if (filter !== 'all'){
+        collapse(li, () => { li.remove(); updateMeta(); });
+      } else {
+        updateMeta();
+      }
+    });
+
+    const span = document.createElement('span');
+    span.className = 'text'; span.textContent = t.text;
+    span.title = 'ダブルクリックで編集';
+    span.addEventListener('dblclick', () => startEdit(li, t, span));
+
+    const del = document.createElement('button');
+    del.className = 'del'; del.type = 'button'; del.textContent = '✕';
+    del.setAttribute('aria-label', 'タスクを削除');
+    del.addEventListener('click', () => {
+      tasks = tasks.filter(x => x.id !== t.id); save();
+      collapse(li, () => { li.remove(); updateMeta(); });
+    });
+
+    li.append(cb, span, del);
+    return li;
+  }
+
+  function startEdit(li, t, span){
+    if (li.querySelector('.edit-input')) return;
+    const input = document.createElement('input');
+    input.className = 'edit-input'; input.value = t.text;
+    input.setAttribute('aria-label', 'タスクを編集');
+    span.replaceWith(input);
+    input.focus(); input.select();
+
+    let finished = false;
+    const restore = commit => {
+      if (finished) return; finished = true;
+      if (commit){
+        const v = input.value.trim();
+        if (v) t.text = v;
+        save();
+      }
+      const s = document.createElement('span');
+      s.className = 'text'; s.textContent = t.text; s.title = 'ダブルクリックで編集';
+      s.addEventListener('dblclick', () => startEdit(li, t, s));
+      input.replaceWith(s);
+    };
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') restore(true);
+      else if (e.key === 'Escape') restore(false);
+    });
+    input.addEventListener('blur', () => restore(true));
+  }
+
+  function collapse(li, cb){
+    li.style.height = li.offsetHeight + 'px';
+    li.style.overflow = 'hidden';
+    li.style.pointerEvents = 'none';
+    requestAnimationFrame(() => {
+      li.style.transition = 'height .24s ease, opacity .18s ease, padding .24s ease, border-width .24s ease';
+      li.style.height = '0px'; li.style.opacity = '0';
+      li.style.paddingTop = '0'; li.style.paddingBottom = '0';
+      li.style.borderWidth = '0';
+    });
+    setTimeout(cb, 260);
+  }
+
+  function updateMeta(){
+    const remain = tasks.filter(t => !t.done).length;
+    const doneCount = tasks.length - remain;
+    badge.innerHTML = '未完了 <b>' + remain + '</b> 件';
+    remaining.innerHTML = '未完了 <b>' + remain + '</b> 件';
+    clearBtn.disabled = doneCount === 0;
+
+    const v = visible().length;
+    empty.classList.toggle('show', v === 0);
+    if (v === 0){
+      const map = {
+        all:    ['空', 'まだタスクがありません。上の入力欄から追加しましょう。'],
+        active: ['済', '未完了のタスクはありません。おつかれさま！'],
+        done:   ['無', '完了したタスクはまだありません。']
+      };
+      emptyKanji.textContent = map[filter][0];
+      emptyMsg.textContent = map[filter][1];
+    }
+  }
+
+  function setFilter(f, moveInd = true){
+    filter = f;
+    localStorage.setItem(FILTER_KEY, f);
+    filterBtns.forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+    if (moveInd) moveIndicator();
+    render();
+  }
+
+  function moveIndicator(){
+    const btn = filters.querySelector('button.active');
+    if (!btn) return;
+    ind.style.left = btn.offsetLeft + 'px';
+    ind.style.width = btn.offsetWidth + 'px';
+  }
+
+  filterBtns.forEach(b => b.addEventListener('click', () => setFilter(b.dataset.filter)));
+  window.addEventListener('resize', moveIndicator);
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const v = addInput.value.trim();
+    if (!v){
+      addInput.classList.remove('shake'); void addInput.offsetWidth;
+      addInput.classList.add('shake'); addInput.focus();
+      return;
+    }
+    const t = {
+      id: (typeof crypto !== 'undefined' && crypto.randomUUID)
+        ? crypto.randomUUID()
+        : Date.now() + '-' + Math.random().toString(16).slice(2),
+      text: v, done: false
+    };
+    tasks.unshift(t); save();
+    addInput.value = '';
+    if (filter === 'done') setFilter('all'); else render();
+    addInput.focus();
+  });
+
+  clearBtn.addEventListener('click', () => {
+    const doneLis = [...list.children].filter(li => li.classList.contains('done'));
+    tasks = tasks.filter(t => !t.done); save();
+    doneLis.forEach((li, i) => setTimeout(() => collapse(li, () => li.remove()), i * 70));
+    setTimeout(updateMeta, doneLis.length * 70 + 280);
+  });
+
+  setFilter(filter, false);
+  requestAnimationFrame(moveIndicator);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple ToDo App</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --bg-color: #f5f7fa;
+            --text-color: #333;
+            --danger-color: #ff5c5c;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* 入力エリア */
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary-color);
+        }
+
+        button#add-btn {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button#add-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* フィルタ */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .filter-btn {
+            background: none;
+            border: 1px solid #ddd;
+            padding: 5px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* リスト */
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            gap: 10px;
+            transition: background 0.2s;
+        }
+
+        .todo-item:hover {
+            background-color: #fafafa;
+        }
+
+        .todo-item.completed .text {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .text {
+            flex: 1;
+            cursor: pointer;
+            word-break: break-all;
+        }
+
+        .edit-input {
+            flex: 1;
+            padding: 5px;
+            font-size: 1rem;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: var(--danger-color);
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* フッター */
+        .footer {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>My ToDo</h1>
+
+    <div class="input-group">
+        <input type="text" id="todo-input" placeholder="新しいタスクを入力...">
+        <button id="add-btn">追加</button>
+    </div>
+
+    <div class="filters">
+        <button class="filter-btn active" data-filter="all">すべて</button>
+        <button class="filter-btn" data-filter="active">未完了</button>
+        <button class="filter-btn" data-filter="completed">完了</button>
+    </div>
+
+    <ul id="todo-list"></ul>
+
+    <div class="footer">
+        <span id="count-display">未完了タスク: 0件</span>
+    </div>
+</div>
+
+<script>
+    // --- 状態管理 ---
+    let todos = JSON.parse(localStorage.getItem('todos')) || [];
+    let currentFilter = 'all';
+
+    const inputEl = document.getElementById('todo-input');
+    const addBtn = document.getElementById('add-btn');
+    const listEl = document.getElementById('todo-list');
+    const countEl = document.getElementById('count-display');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+
+    // --- 関数 ---
+
+    function save() {
+        localStorage.setItem('todos', JSON.stringify(todos));
+        render();
+    }
+
+    function addTask() {
+        const text = inputEl.value.trim();
+        if (text === '') return;
+        
+        todos.push({
+            id: Date.now(),
+            text: text,
+            completed: false
+        });
+        
+        inputEl.value = '';
+        save();
+    }
+
+    function toggleTask(id) {
+        todos = todos.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
+        save();
+    }
+
+    function deleteTask(id) {
+        todos = todos.filter(t => t.id !== id);
+        save();
+    }
+
+    function updateTaskText(id, newText) {
+        if (newText.trim() === '') return; // 空なら更新しない
+        todos = todos.map(t => t.id === id ? { ...t, text: newText } : t);
+        save();
+    }
+
+    function render() {
+        // フィルタリング
+        const filteredTodos = todos.filter(t => {
+            if (currentFilter === 'active') return !t.completed;
+            if (currentFilter === 'completed') return t.completed;
+            return true;
+        });
+
+        listEl.innerHTML = '';
+        filteredTodos.forEach(todo => {
+            const li = document.createElement('li');
+            li.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+            
+            li.innerHTML = `
+                <input type="checkbox" ${todo.completed ? 'checked' : ''}>
+                <span class="text">${escapeHtml(todo.text)}</span>
+                <button class="delete-btn">&times;</button>
+            `;
+
+            // チェックボックスイベント
+            li.querySelector('input').onchange = () => toggleTask(todo.id);
+            
+            // 削除ボタンイベント
+            li.querySelector('.delete-btn').onclick = () => deleteTask(todo.id);
+
+            // ダブルクリック編集イベント
+            const textSpan = li.querySelector('.text');
+            textSpan.ondblclick = () => {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'edit-input';
+                input.value = todo.text;
+                
+                li.replaceChild(input, textSpan);
+                input.focus();
+
+                const finishEdit = () => {
+                    updateTaskText(todo.id, input.value);
+                };
+
+                input.onblur = finishEdit;
+                input.onkeydown = (e) => {
+                    if (e.key === 'Enter') finishEdit();
+                    if (e.key === 'Escape') render(); // キャンセルして再描画
+                };
+            };
+
+            listEl.appendChild(li);
+        });
+
+        // 未完了件数の更新
+        const activeCount = todos.filter(t => !t.completed).length;
+        countEl.textContent = `未完了タスク: ${activeCount}件`;
+    }
+
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    // --- イベントリスナー ---
+
+    addBtn.onclick = addTask;
+
+    inputEl.onkeydown = (e) => {
+        if (e.key === 'Enter') addTask();
+    };
+
+    filterBtns.forEach(btn => {
+        btn.onclick = () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.dataset.filter;
+            render();
+        };
+    });
+
+    // 初期描画
+    render();
+</script>
+
+</body>
+</html>

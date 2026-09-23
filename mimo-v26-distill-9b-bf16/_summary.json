@@ -1,0 +1,37 @@
+{
+  "model": "mimo-v26-distill-9b-bf16",
+  "digest": "unknown",
+  "ranAt": "2026-09-22T23:27:11.875Z",
+  "results": [
+    {
+      "id": "A1",
+      "tokS": "88.9",
+      "chars": 2223
+    },
+    {
+      "id": "A2",
+      "tokS": "90.5",
+      "chars": 114
+    },
+    {
+      "id": "B1",
+      "tokS": "89.8",
+      "chars": 543
+    },
+    {
+      "id": "B2",
+      "tokS": "89.7",
+      "chars": 607
+    },
+    {
+      "id": "C1",
+      "tokS": "89.5",
+      "chars": 2185
+    },
+    {
+      "id": "C2",
+      "tokS": "91.5",
+      "chars": 50
+    }
+  ]
+}
