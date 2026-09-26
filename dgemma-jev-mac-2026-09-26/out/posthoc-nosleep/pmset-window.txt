@@ -1,0 +1,17 @@
+2026-09-26 16:27:51 +0900 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty/ Using AC (Charge:100%) 42 secs   
+2026-09-26 16:28:33 +0900 Sleep               	Entering Sleep state due to 'Maintenance Sleep':TCPKeepAlive=active Using AC (Charge:100%) 126 secs  
+2026-09-26 16:30:39 +0900 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty/ Using AC (Charge:100%) 10 secs   
+2026-09-26 16:30:49 +0900 Sleep               	Entering Sleep state due to 'Maintenance Sleep':TCPKeepAlive=active Using AC (Charge:100%) 3 secs    
+2026-09-26 16:30:52 +0900 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) acdetach SMC.OutboxNotEmpty/ Using AC (Charge:100%) 10 secs   
+2026-09-26 16:31:02 +0900 Sleep               	Entering Sleep state due to 'Maintenance Sleep':TCPKeepAlive=active Using AC (Charge:100%) 62 secs   
+2026-09-26 16:32:04 +0900 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty/ Using AC (Charge:100%) 10 secs   
+2026-09-26 16:32:14 +0900 Sleep               	Entering Sleep state due to 'Maintenance Sleep':TCPKeepAlive=active Using AC (Charge:100%) 2 secs    
+2026-09-26 16:32:16 +0900 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty/ Using AC (Charge:100%) 10 secs   
+2026-09-26 16:32:26 +0900 Sleep               	Entering Sleep state due to 'Maintenance Sleep':TCPKeepAlive=active Using AC (Charge:100%) 4 secs    
+2026-09-26 16:32:30 +0900 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty/ Using AC (Charge:100%) 1125 secs 
+2026-09-26 16:51:15 +0900 Sleep               	Entering Sleep state due to 'Maintenance Sleep':TCPKeepAlive=active Using AC (Charge:100%) 8 secs    
+2026-09-26 16:51:23 +0900 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty/ Using AC (Charge:100%) 10 secs   
+2026-09-26 16:51:33 +0900 Sleep               	Entering Sleep state due to 'Maintenance Sleep':TCPKeepAlive=active Using AC (Charge:100%) 3 secs    
+2026-09-26 16:51:36 +0900 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty/ Using AC (Charge:100%) 10 secs   
+2026-09-26 16:51:46 +0900 Sleep               	Entering Sleep state due to 'Maintenance Sleep':TCPKeepAlive=active Using AC (Charge:100%) 11 secs   
+2026-09-26 16:51:57 +0900 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty/ Using AC (Charge:100%)           

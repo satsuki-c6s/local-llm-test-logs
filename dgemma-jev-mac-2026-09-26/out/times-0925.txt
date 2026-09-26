@@ -1,0 +1,35 @@
+LOCK_WAIT_START=2026-09-25T09:30:59Z 
+LOCK_ACQUIRED=2026-09-25T10:02:31Z 
+MEM_OK=2026-09-25T10:02:31Z free_gb=20
+WEIGHTS_HASHED=2026-09-25T10:04:20Z 
+SERVER_START=2026-09-25T10:04:20Z pid=94035 commit=e04794a
+SERVER_HEALTH=2026-09-25T10:04:31Z 
+d2_authored144_r2_START=2026-09-25T10:04:31Z 
+d2_authored144_r2_END=2026-09-25T10:15:17Z rows_written=144 expected=144 {"rows": 144, "errors": 0, "wall_s": 198.18896045901056}
+d2_wanli256_r2_START=2026-09-25T10:15:17Z 
+d2_wanli256_r2_END=2026-09-25T11:16:51Z rows_written=256 expected=256 {"rows": 256, "errors": 0, "wall_s": 352.428041459003}
+d2_authored144_r3_START=2026-09-25T11:16:51Z 
+d2_authored144_r3_END=2026-09-25T12:07:12Z rows_written=144 expected=144 {"rows": 144, "errors": 0, "wall_s": 193.44814649999898}
+d2_wanli256_r3_START=2026-09-25T12:07:12Z 
+d2_wanli256_r3_END=2026-09-25T12:40:34Z rows_written=256 expected=256 {"rows": 256, "errors": 0, "wall_s": 388.0333639580058}
+GEN_SMOKE=2026-09-25T12:40:39Z {"rows": 3, "errors": 0, "wall_s": 4.960849750001216}
+D3_RVG_r1=2026-09-25T14:31:13Z read={"rows": 144, "errors": 0, "wall_s": 194.55199708300643} gen={"rows": 144, "errors": 21, "wall_s": 200.29141608299688}
+D3_RVG_REPS=2026-09-25T14:31:13Z gen_r1_wall_s=200 reps=5
+D3_RVG_r2=2026-09-25T17:14:09Z read={"rows": 144, "errors": 0, "wall_s": 195.50590274999558} gen={"rows": 144, "errors": 24, "wall_s": 196.32028012500086}
+D3_RVG_r3=2026-09-25T18:49:26Z read={"rows": 144, "errors": 0, "wall_s": 193.23613324998587} gen={"rows": 144, "errors": 22, "wall_s": 201.12398800000665}
+D3_RVG_r4=2026-09-25T20:47:07Z read={"rows": 144, "errors": 0, "wall_s": 204.1232400000008} gen={"rows": 144, "errors": 19, "wall_s": 207.42576158400334}
+D3_RVG_r5=2026-09-25T22:47:09Z read={"rows": 144, "errors": 0, "wall_s": 195.61064362499746} gen={"rows": 144, "errors": 20, "wall_s": 194.88843004200316}
+D3_LOAD_s1=2026-09-26T00:50:03Z {"concurrency": 1, "requests": 200, "failures": 0, "wall_s": 365.0689079580043, "req_per_s": 0.5478417790183518, "p50_ms": 1808.411291502125, "p95_ms": 2472.908199347876} {"concurrency": 16, "requests": 200, "failures": 0, "wall_s": 352.6115958750015, "req_per_s": 0.567196321220527, "p50_ms": 29768.414812497213, "p95_ms": 31066.356543104484} 
+D3_LOAD_s2=2026-09-26T02:17:19Z {"concurrency": 1, "requests": 200, "failures": 0, "wall_s": 400.63363075000234, "req_per_s": 0.49920921422795167, "p50_ms": 1811.2276464962633, "p95_ms": 3922.870896453969} {"concurrency": 16, "requests": 200, "failures": 0, "wall_s": 374.5671660829976, "req_per_s": 0.5339496306936937, "p50_ms": 30616.94156249723, "p95_ms": 38032.95002709492} 
+D3_LOAD_s3=2026-09-26T03:58:13Z {"concurrency": 1, "requests": 200, "failures": 0, "wall_s": 360.295920250006, "req_per_s": 0.5550992635754017, "p50_ms": 1808.5418330010725, "p95_ms": 2346.225258050981} {"concurrency": 16, "requests": 200, "failures": 0, "wall_s": 373.141195958, "req_per_s": 0.5359901350118189, "p50_ms": 30236.308770996402, "p95_ms": 40291.180548210104} 
+D3_LOAD_s4=2026-09-26T04:49:42Z {"concurrency": 1, "requests": 200, "failures": 0, "wall_s": 382.89440695800295, "req_per_s": 0.5223372197806395, "p50_ms": 1848.6555834970204, "p95_ms": 2592.555763945711} {"concurrency": 16, "requests": 200, "failures": 0, "wall_s": 461.8039535840071, "req_per_s": 0.43308420910610035, "p50_ms": 36513.83091649768, "p95_ms": 60140.366823555814} 
+D3_LOAD_s5=2026-09-26T05:49:42Z {"concurrency": 1, "requests": 200, "failures": 0, "wall_s": 541.8037847910018, "req_per_s": 0.36913732538274724, "p50_ms": 2182.718957999896, "p95_ms": 5622.75187980631} {"concurrency": 16, "requests": 200, "failures": 0, "wall_s": 351.19785225001397, "req_per_s": 0.5694795646347579, "p50_ms": 28968.317438004306, "p95_ms": 32696.67500625583} 
+D3_LOAD_3264=2026-09-26T06:01:33Z {"concurrency": 32, "requests": 200, "failures": 0, "wall_s": 337.3566378329997, "req_per_s": 0.5928444191425847, "p50_ms": 57693.949500499, "p95_ms": 58185.89574729194} {"concurrency": 64, "requests": 200, "failures": 0, "wall_s": 344.4876555420051, "req_per_s": 0.5805723275782607, "p50_ms": 115274.52849999827, "p95_ms": 115836.86242675321} 
+d2_typesafe102_r1_START=2026-09-26T06:01:33Z 
+d2_typesafe102_r1_END=2026-09-26T06:27:35Z rows_written=102 expected=102 {"rows": 102, "errors": 0, "wall_s": 1562.247247708001}
+d2_typesafe102_r2_START=2026-09-26T06:27:35Z 
+d2_typesafe102_r2_END=2026-09-26T06:53:22Z rows_written=102 expected=102 {"rows": 102, "errors": 0, "wall_s": 1546.380502125001}
+d2_typesafe102_r3_START=2026-09-26T06:53:22Z 
+d2_typesafe102_r3_END=2026-09-26T07:19:09Z rows_written=102 expected=102 {"rows": 102, "errors": 0, "wall_s": 1546.680651082992}
+RESUME_DONE=2026-09-26T07:19:09Z 
+CLEANUP=2026-09-26T07:19:14Z server_stopped lock_released=1

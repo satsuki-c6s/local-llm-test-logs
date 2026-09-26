@@ -1,0 +1,28 @@
+2026-09-26 16:32:37 +0900 
+Assertion status system-wide:
+   BackgroundTask                 0
+   ApplePushServiceTask           0
+   UserIsActive                   0
+   PreventUserIdleDisplaySleep    0
+   SoftwareUpdateTask             0
+   PreventSystemSleep             1
+   PreventSystemSleepSecurityIndicator 0
+   ExternalMedia                  0
+   PreventUserIdleSystemSleep     1
+   NetworkClientActive            0
+   InternalPreventSleep           1
+Listed by owning process:
+   pid 582(powerd): [0x0001829900019f5b] 45:31:36 PreventUserIdleSystemSleep named: "Powerd - Prevent sleep while display is on"  
+   pid 582(powerd): [0x0001e3bb000d9e13] 00:00:07 InternalPreventSleep named: "com.apple.powermanagement.acwakelinger"  
+	Timeout will fire in 3 secs Action=TimeoutActionRelease
+   pid 10870(caffeinate): [0x0001e3c200019e18] 00:00:00 PreventUserIdleSystemSleep named: "caffeinate command-line tool"  
+	Details: caffeinate asserting on behalf of 'posthoc-nosleep/run_posthoc.sh' (pid 10868)
+	Localized=THE CAFFEINATE TOOL IS PREVENTING SLEEP.
+   pid 10870(caffeinate): [0x0001e3c200079e19] 00:00:00 PreventSystemSleep named: "caffeinate command-line tool"  
+	Details: caffeinate asserting on behalf of 'posthoc-nosleep/run_posthoc.sh' (pid 10868)
+	Localized=THE CAFFEINATE TOOL IS PREVENTING SLEEP.
+   pid 809(coreaudiod): [0x0001e3bc00018cef] 00:00:06 PreventUserIdleSystemSleep named: "com.apple.audio.BuiltInSpeakerDevice.context.preventuseridlesleep"  
+	Created for PID: 84524. 
+	Resources: audio-out BuiltInSpeakerDevice 
+Kernel Assertions: 0x100=MAGICWAKE
+   id=556  level=255 0x100=MAGICWAKE creat=2026/09/16 6:53  mod=2026/09/26 13:36 description=en0 owner=IOSkywalkNetworkBSDClient

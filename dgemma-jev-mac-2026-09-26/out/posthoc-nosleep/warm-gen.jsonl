@@ -1,0 +1,3 @@
+{"id": "a3f18f3a63d45345942b", "option_ids": ["supported", "insufficient", "contradicted"], "probabilities": [0.0, 0.0, 1.0], "choice": "contradicted", "raw_text": "{\"choice\": \"contradicted\"}", "output_tokens": 7, "latency_s": 1.7262440000049537}
+{"id": "f40beba9088c8db8bbd6", "option_ids": ["supported", "insufficient", "contradicted"], "probabilities": [1.0, 0.0, 0.0], "choice": "supported", "raw_text": "{\"choice\": \"supported\"}", "output_tokens": 6, "latency_s": 1.6517478340101661}
+{"id": "0b43ea8e24e74d621f1b", "option_ids": ["insufficient", "supported", "contradicted"], "probabilities": [0.0, 1.0, 0.0], "choice": "supported", "raw_text": "{\"choice\": \"supported\"}", "output_tokens": 6, "latency_s": 0.8391526250052266}

@@ -1,0 +1,12 @@
+25/256 errors=0 elapsed=37.3s
+50/256 errors=0 elapsed=71.2s
+75/256 errors=0 elapsed=105.5s
+100/256 errors=0 elapsed=139.6s
+125/256 errors=0 elapsed=174.7s
+150/256 errors=0 elapsed=208.9s
+175/256 errors=0 elapsed=243.0s
+200/256 errors=0 elapsed=277.1s
+225/256 errors=0 elapsed=311.5s
+250/256 errors=0 elapsed=344.4s
+256/256 errors=0 elapsed=352.4s
+{"rows": 256, "errors": 0, "wall_s": 352.428041459003}

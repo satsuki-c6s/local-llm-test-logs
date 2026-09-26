@@ -1,0 +1,7 @@
+25/144 errors=0 elapsed=30.4s
+50/144 errors=4 elapsed=62.9s
+75/144 errors=12 elapsed=99.0s
+100/144 errors=17 elapsed=135.4s
+125/144 errors=20 elapsed=170.4s
+144/144 errors=24 elapsed=196.3s
+{"rows": 144, "errors": 24, "wall_s": 196.32028012500086}
